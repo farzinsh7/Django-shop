@@ -19,6 +19,8 @@ class Variations(models.Model):
     image = models.ImageField(upload_to='variations', null=True, blank=True)
     attribute = models.ForeignKey(Attribute, null=True, on_delete=models.SET_NULL, related_name='variation')
 
+
     def __str__(self):
         return self.title
+    
     
