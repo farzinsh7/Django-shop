@@ -33,7 +33,6 @@ admin.site.register(Tags, TagsAdmin)
 class GalleriesInline(nested_admin.NestedTabularInline):
     model = Gallery
     extra = 1
-    readonly_fields = ('pk',)
     formfield_overrides = {
             models.CharField: {'widget': TextInput(attrs={'size':'30'})},
         }
