@@ -1,0 +1,10 @@
+{% extends 'base/main_base.html' %}
+{% load static %}
+{% block content %}
+<h2>Product Archive</h2>
+<ul>
+    {% for item in product %}
+    <li><a href="{% url "product:detail_view" item.slug %}"><h2>{{ item.title }}</h2></a></li>
+    {% endfor %}
+</ul>
+{% endblock content %}
