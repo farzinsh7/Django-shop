@@ -5,6 +5,11 @@ from attribute.models import Attribute, Variations
 from django.utils.safestring import mark_safe
 
 # Create your models here.
+class ProductsManager(models.Manager):
+    def published(self):
+        return self.filter(status='p')
+
+
 class Category(models.Model):
     title = models.CharField(max_length=300)
     slug = models.SlugField(max_length=200, unique=True)
@@ -26,6 +31,10 @@ class Tags(models.Model):
 
 
 class Product(models.Model):
+    STATUS_CHOICES = (
+        ('d', 'Draft'),
+        ('p', 'Publish')
+    )
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=250, unique=True)
     description = RichTextUploadingField(null=True)
@@ -35,6 +44,7 @@ class Product(models.Model):
     dimenstions = models.CharField(max_length=200, null=True, blank=True)
     category = models.ManyToManyField(Category, related_name='category')
     tag = models.ManyToManyField(Tags, related_name='tag')
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, null=True)
     attribute = models.ManyToManyField(Attribute, related_name='attribute')
     image = models.ImageField(upload_to='shop/image', null=True, blank=True)
     # tax_class = pass
@@ -51,6 +61,8 @@ class Product(models.Model):
             "<img width=100 height=75 style='border-radius: 5px;' src='{}'>".format(self.image.url))
 
     thumbnail_tag.short_description = "Thumbnail"
+
+    objects = ProductsManager()
 
 
 class Gallery(models.Model):
