@@ -10,4 +10,5 @@ class ProductForm(forms.ModelForm):
         widgets = {
             'category': Select2MultipleWidget,
             'tag': Select2MultipleWidget,
+            'attribute': Select2MultipleWidget,
         }

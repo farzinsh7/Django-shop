@@ -32,4 +32,3 @@ class Variations(models.Model):
             return format_html("{}, ".format(self.title))
     
     label.short_description = "label"
-    

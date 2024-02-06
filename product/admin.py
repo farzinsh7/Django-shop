@@ -1,8 +1,12 @@
 from django.contrib import admin
-from .models import Product, Tags, Category, Gallery
+from .models import Product, Tags, Category, Gallery, Variant, GalleryVariations
 from django.forms import Textarea, TextInput
 from django.db import models
 from .forms import ProductForm
+from django.utils.safestring import mark_safe
+import admin_thumbnails
+import nested_admin
+
 # from attribute.models import Attribute, Variations
 
 # Register your models here.
@@ -25,27 +29,36 @@ class TagsAdmin(admin.ModelAdmin):
 
 admin.site.register(Tags, TagsAdmin)
 
-class GalleriesAdmin(admin.TabularInline):
+@admin_thumbnails.thumbnail('image')
+class GalleriesInline(nested_admin.NestedTabularInline):
     model = Gallery
     extra = 1
-    readonly_fields = ('image_preview',)
+    readonly_fields = ('pk',)
     formfield_overrides = {
             models.CharField: {'widget': TextInput(attrs={'size':'30'})},
         }
 
-    def image_preview(self, obj):
-        if obj.image:
-            return mark_safe('<img src="{0}" width="100" height="100" style="object-fit:contain" />'.format(obj.image.url))
-        else:
-            return '(No image)'
+@admin_thumbnails.thumbnail('image')
+class GalleryVariationsInline(nested_admin.NestedTabularInline):
+    model = GalleryVariations
+    extra = 1
 
-    image_preview.short_description = 'Preview'
+
+class VariantInline(nested_admin.NestedTabularInline):
+    model = Variant
+    # parent_model = Variant
+    inlines = [GalleryVariationsInline]
+    extra = 1
+    show_change_link = True
+    # formfield_overrides = {
+    #         models.CharField: {'widget': TextInput(attrs={'size':'20'})},
+    #     }
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(nested_admin.NestedModelAdmin):
     form = ProductForm
-    inlines = [GalleriesAdmin]
+    inlines = [GalleriesInline, VariantInline]
     prepopulated_fields = {"slug": ["title"]}
     list_display = ('thumbnail_tag', 'title')
     readonly_fields = ('image_preview',)
@@ -58,3 +71,5 @@ class ProductAdmin(admin.ModelAdmin):
             return '(No image)'
     
     image_preview.short_description = 'Preview'
+
+
