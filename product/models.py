@@ -77,7 +77,7 @@ class Gallery(models.Model):
 
 class Variant(models.Model):
     title = models.CharField(max_length=200)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name="variant")
     attribute = models.ForeignKey(Attribute, on_delete=models.SET_NULL, null=True, blank=True)
     variations = models.ForeignKey(Variations, on_delete=models.SET_NULL, null=True, blank=True)
     sale_price = models.IntegerField(null=True, blank=True)
