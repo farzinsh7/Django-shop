@@ -20,3 +20,14 @@ class Color(models.Model):
             return format_html("{}, ".format(self.title))
     
     label.short_description = "label"
+
+
+
+class BeltSize(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=250, unique=True)
+    description = models.TextField(null=True, blank=True)
+
+
+    def __str__(self):
+        return self.title
