@@ -50,7 +50,6 @@ class Product(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, null=True)
     variation = models.CharField(max_length=1, choices=VARIATIONS, null=True)
     image = models.ImageField(upload_to='shop/image', null=True, blank=True)
-    # color = models.ManyToManyField(Color, related_name='color')
     # tax_class = pass
     # shiping_class = pass
     # related_product = pass
@@ -61,7 +60,7 @@ class Product(models.Model):
     
     def thumbnail_tag(self):
         return format_html(
-            "<img width=100 height=75 style='border-radius: 5px;' src='{}'>".format(self.image.url))
+            "<img width=200 height=200 style='border-radius: 5px;' src='{}'>".format(self.image.url))
 
     thumbnail_tag.short_description = "Thumbnail"
 

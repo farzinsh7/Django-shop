@@ -1,7 +1,7 @@
-# forms.py
 from django import forms
 from .models import Product
 from django_select2.forms import Select2MultipleWidget
+
 
 class ProductForm(forms.ModelForm):
     class Meta:
