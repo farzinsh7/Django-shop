@@ -1,8 +1,7 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.html import format_html
-from attribute.models import Attribute, Variations
-from django.utils.safestring import mark_safe
+from attribute.models import Color
 
 # Create your models here.
 class ProductsManager(models.Manager):
@@ -35,22 +34,26 @@ class Product(models.Model):
         ('d', 'Draft'),
         ('p', 'Publish')
     )
+    VARIATIONS = (
+        ('c', 'Color'),
+        ('s', 'Size')
+    )
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=250, unique=True)
     description = RichTextUploadingField(null=True)
     short_description = RichTextUploadingField(null=True)
     price = models.IntegerField()
-    sku = models.CharField(max_length=200, null=True, blank=True)
+    sku = models.CharField(max_length=200, null=True, blank=True, unique=True)
     dimenstions = models.CharField(max_length=200, null=True, blank=True)
     category = models.ManyToManyField(Category, related_name='category')
     tag = models.ManyToManyField(Tags, related_name='tag')
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, null=True)
-    attribute = models.ManyToManyField(Attribute, related_name='attribute')
+    variation = models.CharField(max_length=1, choices=VARIATIONS, null=True)
     image = models.ImageField(upload_to='shop/image', null=True, blank=True)
+    # color = models.ManyToManyField(Color, related_name='color')
     # tax_class = pass
     # shiping_class = pass
     # related_product = pass
-    # variation = pass
 
 
     def __str__(self):
@@ -73,39 +76,3 @@ class Gallery(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Variant(models.Model):
-    title = models.CharField(max_length=200)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name="variant")
-    attribute = models.ForeignKey(Attribute, on_delete=models.SET_NULL, null=True, blank=True)
-    variations = models.ForeignKey(Variations, on_delete=models.SET_NULL, null=True, blank=True)
-    sale_price = models.IntegerField(null=True, blank=True)
-    sku = models.CharField(max_length=200, null=True, blank=True)
-    stock_quantity = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.title
-
-    
-
-    def image(self):
-        img = Gallery.objects.get(id=self.image_id)
-        if img.id is not True:
-            varimage=img.image.url 
-        else:
-            varimage=""
-        return varimage
-        
-
-    def image_tag(self):
-        img = Gallery.objects.get(id=self.image_id)
-        if img.id is not None:
-            return mark_safe('<img src="{}" height="100"/>'.format(img.image.url))
-        else:
-            return ""
-
-
-class GalleryVariations(models.Model):
-    image = models.ImageField(upload_to='shop/gallery', null=True, blank=True)
-    variant = models.ForeignKey(Variant, null=True, on_delete=models.SET_NULL, related_name='gallery_variations')

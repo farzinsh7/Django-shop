@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'django_select2',
-    'nested_admin',
 
 
     # Custom Apps

@@ -24,17 +24,6 @@
         <form class="cart-form clearfix" method="post">
             <!-- Select Box -->
             <div class="select-box d-flex mt-50 mb-30">
-                <ul name="select" id="productSize" class="mr-5">
-                    {% for item in product.variant.all %}
-                        {% if item.variations.image %}
-                            <img width="25" src="/media/{{ item.variations.image }}" alt="">
-                        {% else %}
-                            <h6>
-                                {{ item.variations.title }}
-                            </h6>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
                 <select name="select" id="productColor">
                     <option value="value">Color: Black</option>
                     <option value="value">Color: White</option>

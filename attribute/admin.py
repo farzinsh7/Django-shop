@@ -1,15 +1,15 @@
 from django.contrib import admin
-from .models import Variations, Attribute
+from .models import Color
 from django.utils.safestring import mark_safe
 from django.forms import Textarea, TextInput
 from django.db import models
 from django.utils.html import format_html
 
 # Register your models here.
-class VariationsAdmin(admin.TabularInline):
-    model = Variations
-    extra = 1
+@admin.register(Color)
+class AttributesAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["title"]}
+    list_display = ('title', 'labels')
     readonly_fields = ('image_preview',)
     formfield_overrides = {
             models.TextField: {'widget': Textarea(attrs={'rows':5, 'cols':40})},
@@ -24,13 +24,6 @@ class VariationsAdmin(admin.TabularInline):
             return '(No image)'
 
     image_preview.short_description = 'Preview'
-
-
-@admin.register(Attribute)
-class AttributesAdmin(admin.ModelAdmin):
-    inlines = [VariationsAdmin]
-    prepopulated_fields = {"slug": ["title"]}
-    list_display = ('title', 'labels')
 
     
     def labels(self, obj):
