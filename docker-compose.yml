@@ -11,6 +11,9 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    
+    expose:
+      - 5432
 
     restart: always
   
@@ -25,10 +28,12 @@ services:
       - ./core:/usr/src/app
     
     working_dir: /usr/src/app
-    command: django-admin startproject core .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
     environment:
       - DEBUG=True
-    # restart: always
+    restart: always
     depends_on:
       - db
     
