@@ -5,9 +5,9 @@ services:
     volumes:
       - ./postgres/data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=value
-      - POSTGRES_USER=value
-      - POSTGRES_PASSWORD=value
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     expose:
       - 5432
     restart: always
@@ -20,6 +20,7 @@ services:
     volumes:
       - ./core:/usr/src/app
     working_dir: /usr/src/app
+    # command: django-admin startproject core .
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
