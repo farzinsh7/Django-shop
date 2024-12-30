@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
-from django.conf import settings
 from django.db.models.signals import post_save
 from django.db import models
 from django.dispatch import receiver
@@ -80,8 +79,12 @@ class Profile(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.user.email
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+
+@receiver(post_save, sender=User)
 def create_profile(sender, **kwargs):
     if kwargs['created'] and kwargs['instance'].type == UserType.customer.value:
-        Profile.objects.create(user=kwargs['instance'])
+        user_instance = kwargs['instance']
+        Profile.objects.create(id=user_instance.id, user=user_instance)
