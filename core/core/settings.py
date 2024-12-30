@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # My_APPS
-    'website'
+    # Third-party Apps
+
+    # Custom Apps
+    'website',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +168,6 @@ if SHOW_DEBUGGER_TOOLBAR:
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [
         ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
+
+AUTH_USER_MODEL = 'accounts.User'
