@@ -1,7 +1,6 @@
 {% extends "base/base.html" %}
 {% block title %}Login Page{% endblock title%}
 {% block content %}
-{{ request.user.is_authenticated}}
 <!-- Form -->
 <div class="container content-space-3 content-space-t-lg-4 content-space-b-lg-3">
   <div class="flex-grow-1 mx-auto" style="max-width: 28rem;">
@@ -13,11 +12,11 @@
     <!-- End Heading -->
 
     <!-- Form -->
-    <form action='{% url "accounts:login" %}' mehthod="post">
+    <form action='{% url "accounts:login" %}' method="post">
         {% csrf_token %}
       <!-- Form -->
       <div class="mb-4">
-        <label class="form-label" for="signupSimpleLoginEmail">ایمیل شما</label>
+        <label class="form-label">ایمیل شما</label>
         <input type="email" class="form-control form-control-lg text-center" name="username"
           id="signupSimpleLoginEmail" placeholder="email@site.com" aria-label="email@site.com" required>
         <span class="invalid-feedback">لطفا یک آدرس ایمیل معتبر وارد کنید.</span>
@@ -56,4 +55,5 @@
     <!-- End Form -->
   </div>
 </div>
-<!-- End Form -->{% endblock content %}
+<!-- End Form -->
+ {% endblock content %}
