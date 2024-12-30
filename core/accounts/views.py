@@ -6,3 +6,7 @@ class LoginView(auth_view.LoginView):
     form_class = AuthenticationForm
     template_name = "accounts/login.html"
     redirect_authenticated_user = False
+
+
+class LogoutView(auth_view.LogoutView):
+    pass
