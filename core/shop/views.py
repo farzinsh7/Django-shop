@@ -1,6 +1,12 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import (
+    ListView,
+    DetailView,
+)
+from . import models
 
 
-class ProductGridView(TemplateView):
+class ProductGridView(ListView):
+    queryset = models.Product.objects.filter(
+        status=models.StatusType.publish.value)
     template_name = "shop/product-grid.html"
