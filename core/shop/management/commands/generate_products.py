@@ -38,7 +38,7 @@ class Command(BaseCommand):
             ))
             return
 
-        for i in range(100):
+        for i in range(10):
             user = random.choice(users)  # Randomly select a user
             title = fake.sentence(nb_words=3).rstrip(".")
             product = Product.objects.create(
@@ -59,9 +59,6 @@ class Command(BaseCommand):
                 random.sample(list(categories), k=random.randint(1, 3))
             )
 
-            if i % 10 == 0:
-                self.stdout.write(f"{i} products created...")
-
         self.stdout.write(self.style.SUCCESS(
-            "Successfully created 100 fake Product entries."
+            "Successfully created 10 fake Product entries."
         ))
