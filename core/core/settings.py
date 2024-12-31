@@ -44,8 +44,9 @@ INSTALLED_APPS = [
     # Third-party Apps
 
     # Custom Apps
-    'website',
     'accounts',
+    'website',
+    'shop',
 ]
 
 MIDDLEWARE = [
