@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -28,12 +29,14 @@ class Product(models.Model):
     slug = models.SlugField(allow_unicode=True)
     image = models.ImageField(upload_to="product/img")
     description = models.TextField()
+    short_description = models.TextField(null=True, blank=True)
     stock = models.PositiveIntegerField(default=0)
     status = models.IntegerField(
         choices=StatusType.choices, default=StatusType.draft.value)
     sku = models.CharField(unique=True)
     price = models.DecimalField(default=0, max_digits=15, decimal_places=0)
-    discount_percent = models.IntegerField(default=0)
+    discount_percent = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
