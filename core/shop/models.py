@@ -23,7 +23,7 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.PROTECT)
-    category = models.ManyToManyField(ProductCategory)
+    category = models.ManyToManyField(ProductCategory, related_name="category")
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True)
     image = models.ImageField(upload_to="product/img")
@@ -39,6 +39,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_price(self):
+        discount_amount = int(self.price) * (self.discount_percent / 100)
+        final_amount = int(self.price) - discount_amount
+        return "{:,}".format(int(final_amount))
 
     class Meta:
         ordering = ["-created_at"]
