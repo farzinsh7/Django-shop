@@ -63,6 +63,15 @@
                 <!-- Navbar Collapse -->
                 <div id="navbarVerticalNavMenu" class="collapse navbar-collapse">
                     <form action="." class="w-100">
+                        <div class="border-bottom pb-4 mb-4">
+                            <h5>جستو جوی کالا</h5>
+                            <div class="d-grid gap-2">
+                                <div class="form-group">
+                                    <label class="form-label d-flex" for="searchQuery">جستو جوی</label>
+                                    <input class="form-control" placeholder="واژه مورد نظر را وارد نمایید" type="text" name="q" id="searchQuery">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="border-bottom pb-4 mb-4">
                             <h5>قیمت</h5>
@@ -82,9 +91,11 @@
                             <h5>دسته بندی</h5>
                             <div class="d-grid gap-2">
                                 <div class="mb-2 mb-sm-0 me-sm-2">
-                                    <select class="form-select form-select-sm" name="category">
+                                    <select class="form-select form-select-sm" name="category_id">
                                         <option value="" selected>انتخاب دسته بندی</option>
-                                        <option value="" selected>دیجیتال</option>
+                                        {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.title }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
