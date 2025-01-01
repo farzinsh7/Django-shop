@@ -9,25 +9,25 @@
     <div class="container py-4">
         <div class="row">
             <div class="col-sm">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 ">
+                        <li class="breadcrumb-item ps-2">
+                        <a href="{% url "website:index" %}">خانه</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                        <a href="{% url "shop:product-grid" %}">فروشگاه</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">لیست محصولات</li>
+                    </ol>
+                </nav>
+                <!-- End Breadcrumb -->
+            </div>
+            <!-- End Col -->
+            <div class="col-sm-auto">
                 <h4 class="mb-0">شبکه محصولات</h4>
             </div>
-        <!-- End Col -->
-        <div class="col-sm-auto">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 ">
-                <li class="breadcrumb-item ps-2">
-                <a href="index.html">خرید کنید</a>
-                </li>
-                <li class="breadcrumb-item">
-                <a href="products-grid.html">محصولات</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">توری</li>
-            </ol>
-            </nav>
-            <!-- End Breadcrumb -->
-        </div>
-        <!-- End Col -->
+            <!-- End Col -->
         </div>
         <!-- End Row -->
     </div>
