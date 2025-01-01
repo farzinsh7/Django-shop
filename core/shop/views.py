@@ -1,3 +1,4 @@
+from django.core import exceptions
 from django.shortcuts import render
 from django.views.generic import (
     ListView,
@@ -8,7 +9,13 @@ from . import models
 
 class ProductGridView(ListView):
     template_name = "shop/product-grid.html"
-    paginate_by = 3
+    paginate_by = 6
+    queryset = models.Product.objects.prefetch_related("category").filter(
+        status=models.StatusType.publish.value)
+
+    def get_paginate_by(self, queryset):
+
+        return self.request.GET.get('page_size', self.paginate_by)
 
     def get_queryset(self):
         queryset = models.Product.objects.prefetch_related("category").filter(
@@ -17,6 +24,15 @@ class ProductGridView(ListView):
             queryset = queryset.filter(title__icontains=search_q)
         elif category_id := self.request.GET.get("category_id"):
             queryset = queryset.filter(category__id=category_id)
+        elif min_price := self.request.GET.get("min_price"):
+            queryset = queryset.filter(price__gte=min_price)
+        elif max_price := self.request.GET.get("max_price"):
+            queryset = queryset.filter(price__lte=max_price)
+        elif order_by := self.request.GET.get("order_by"):
+            try:
+                queryset = queryset.order_by(order_by)
+            except exceptions.FieldError:
+                pass
         return queryset
 
     def get_context_data(self, **kwargs):
