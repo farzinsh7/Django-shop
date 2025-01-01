@@ -47,6 +47,7 @@ class Command(BaseCommand):
                 slug=slugify(title, allow_unicode=True),
                 image=random.choice(images_list),
                 description=fake.paragraph(nb_sentences=10),
+                short_description=fake.paragraph(nb_sentences=1),
                 stock=random.randint(0, 10),
                 status=random.choice(StatusType.choices)[0],
                 sku=fake.unique.ean(length=13),
