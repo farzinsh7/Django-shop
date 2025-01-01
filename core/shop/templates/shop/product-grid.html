@@ -67,8 +67,8 @@
                             <h5>جستو جوی کالا</h5>
                             <div class="d-grid gap-2">
                                 <div class="form-group">
-                                    <label class="form-label d-flex" for="searchQuery">جستو جوی</label>
-                                    <input class="form-control" placeholder="واژه مورد نظر را وارد نمایید" type="text" name="q" id="searchQuery">
+                                    <label class="form-label d-flex" for="search-query-filter">جستو جوی</label>
+                                    <input class="form-control" placeholder="واژه مورد نظر را وارد نمایید" type="text" name="q" id="search-query-filter">
                                 </div>
                             </div>
                         </div>
@@ -78,12 +78,12 @@
                             <div class="d-grid gap-2">
 
                                 <div class="form-group">
-                                    <label class="form-label d-flex" for="minPrice">کمترین قیمت</label>
-                                    <input class="form-control" type="number" name="min_price" id="minPrice">
+                                    <label class="form-label d-flex" for="min-price-filter">کمترین قیمت</label>
+                                    <input class="form-control" type="number" name="min_price" id="min-price-filter">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label d-flex" for="maxPrice">بیشترین قیمت</label>
-                                    <input class="form-control" type="number" name="max_price" id="maxPrice">
+                                    <label class="form-label d-flex" for="max-price-filter">بیشترین قیمت</label>
+                                    <input class="form-control" type="number" name="max_price" id="max-price-filter">
                                 </div>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                             <h5>دسته بندی</h5>
                             <div class="d-grid gap-2">
                                 <div class="mb-2 mb-sm-0 me-sm-2">
-                                    <select class="form-select form-select-sm" name="category_id">
+                                    <select class="form-select form-select-sm" name="category_id" id="category-id-filter">
                                         <option value="" selected>انتخاب دسته بندی</option>
                                         {% for category in categories %}
                                         <option value="{{ category.id }}">{{ category.title }}</option>
@@ -121,23 +121,23 @@
                     <div class="d-sm-flex justify-content-sm-end align-items-center">
                         <!-- Select -->
                         <div class="mb-2 mb-sm-0 me-sm-2">
-                            <select class="form-select form-select-sm">
+                            <select class="form-select form-select-sm" id="order-by-filter">
                                 <option value="" selected>مرتب سازی</option>
-                                <option value="">جدیدترین</option>
-                                <option value="">قدیمی ترین</option>
-                                <option value="">بیشترین قیمت</option>
-                                <option value="">کمترین قیمت</option>
+                                <option value="1">جدیدترین</option>
+                                <option value="2">قدیمی ترین</option>
+                                <option value="3">بیشترین قیمت</option>
+                                <option value="4">کمترین قیمت</option>
                             </select>
                         </div>
                         <!-- End Select -->
                         <!-- Select -->
                         <div class="mb-2 mb-sm-0 me-sm-2">
-                            <select class="form-select form-select-sm">
+                            <select class="form-select form-select-sm" id="page-size-filter">
                                 <option value="" selected>تعداد در صفحه</option>
-                                <option value="">9</option>
-                                <option value="">18</option>
-                                <option value="">27</option>
-                                <option value="">36</option>
+                                <option value="9">9</option>
+                                <option value="18">18</option>
+                                <option value="27">27</option>
+                                <option value="36">36</option>
                             </select>
                         </div>
                         <!-- End Select -->
@@ -333,3 +333,16 @@
 </div>
 <!-- End Clients -->
 {% endblock content %}
+{% block extra_js %}
+<script>
+    $(document).ready(function(){
+        let current_url_params = new URLSearchParams(window.location.search)
+        $("#page-size-filter").val(current_url_params.get("page_size") || "")
+        $("#search-query-filter").val(current_url_params.get("q") || "")
+        $("#order-by-filter").val(current_url_params.get("order_by") || "")
+        $("#category-id-filter").val(current_url_params.get("category_id") || "")
+        $("#min-price-filter").val(current_url_params.get("min_price") || "")
+        $("#max-price-filter").val(current_url_params.get("max_price") || "")
+    })
+</script>
+{% endblock extra_js %} 

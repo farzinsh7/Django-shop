@@ -22,13 +22,13 @@ class ProductGridView(ListView):
             status=models.StatusType.publish.value)
         if search_q := self.request.GET.get("q"):
             queryset = queryset.filter(title__icontains=search_q)
-        elif category_id := self.request.GET.get("category_id"):
+        if category_id := self.request.GET.get("category_id"):
             queryset = queryset.filter(category__id=category_id)
-        elif min_price := self.request.GET.get("min_price"):
+        if min_price := self.request.GET.get("min_price"):
             queryset = queryset.filter(price__gte=min_price)
-        elif max_price := self.request.GET.get("max_price"):
+        if max_price := self.request.GET.get("max_price"):
             queryset = queryset.filter(price__lte=max_price)
-        elif order_by := self.request.GET.get("order_by"):
+        if order_by := self.request.GET.get("order_by"):
             try:
                 queryset = queryset.order_by(order_by)
             except exceptions.FieldError:
