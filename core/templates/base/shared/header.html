@@ -4,7 +4,7 @@
     <div class="container">
       <nav class="js-mega-menu navbar-nav-wrap">
         <!-- Default Logo -->
-        <a class="navbar-brand" href="index.html" aria-label="Front">
+        <a class="navbar-brand" href="{% url "website:index" %}" aria-label="Front">
           <img class="navbar-brand-logo" src="{% static 'svg/logos/logo.svg' %}" alt="Logo">
         </a>
         <!-- End Default Logo -->
@@ -41,10 +41,12 @@
           <ul  class="navbar-nav">
             <li class="nav-item">
               <!-- Search -->
-              <button class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="offcanvas"
+              <form action="">
+                <button class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbarSearch" aria-controls="offcanvasNavbarSearch">
                 <i class="bi-search"></i>
               </button>
+              </form>
               <!-- End Search -->
 
               <!-- Shopping Cart -->
