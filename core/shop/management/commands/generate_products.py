@@ -7,11 +7,11 @@ from shop.models import Product, ProductCategory, StatusType
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 
-fake = Faker()
+fake = Faker(locale="fa-IR")
 
 
 class Command(BaseCommand):
-    help = "Generate 100 fake Product entries"
+    help = "Generate 10 fake Product entries"
 
     def handle(self, *args, **kwargs):
         User = get_user_model()
@@ -46,7 +46,7 @@ class Command(BaseCommand):
                 title=title,
                 slug=slugify(title, allow_unicode=True),
                 image=random.choice(images_list),
-                description=fake.text(max_nb_chars=200),
+                description=fake.paragraph(nb_sentences=10),
                 stock=random.randint(0, 10),
                 status=random.choice(StatusType.choices)[0],
                 sku=fake.unique.ean(length=13),

@@ -4,7 +4,7 @@ from faker import Faker
 from shop.models import ProductCategory
 from django.utils.text import slugify
 
-fake = Faker()
+fake = Faker(locale="fa-IR")
 
 
 class Command(BaseCommand):
