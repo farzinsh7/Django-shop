@@ -48,11 +48,17 @@
               <!-- End Search -->
 
               <!-- Shopping Cart -->
-              <button type="button" class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="offcanvas"
+              {% comment %} <button type="button" class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbarShoppingCart" aria-controls="offcanvasNavbarShoppingCart">
                 <i class="bi-basket"></i>
                 <span class="cart-item-count ">3</span>
-              </button>
+              </button> {% endcomment %}
+              <!-- End Shopping Cart -->
+              <!-- Shopping Cart -->
+              <a class="btn btn-ghost-secondary btn-icon" href="{% url "cart:session-cart-summary" %}">
+                <i class="bi-basket"></i>
+                <span class="cart-item-count" id="total-cart-item-count">{{ cart.get_total_quantity }}</span>
+              </a>
               <!-- End Shopping Cart -->
 
               {% if request.user.is_authenticated %}
