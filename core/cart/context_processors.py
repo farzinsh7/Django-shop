@@ -1,5 +1,6 @@
+from .cart import CartSession
 
 
 def cart_processor(request):
-
-    return {"name": "Farzin"}
+    cart = CartSession(request.session)
+    return {"cart": cart}
