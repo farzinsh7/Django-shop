@@ -44,8 +44,11 @@ class Product(models.Model):
         return self.title
 
     def get_price(self):
-        discount_amount = int(self.price) * (self.discount_percent / 100)
-        final_amount = int(self.price) - discount_amount
+        if self.discount_percent:
+            discount_amount = int(self.price) * (self.discount_percent / 100)
+            final_amount = int(self.price) - discount_amount
+        else:
+            final_amount = int(self.price)
         return int(final_amount)
 
     class Meta:

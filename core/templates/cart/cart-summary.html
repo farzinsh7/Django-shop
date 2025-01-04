@@ -27,7 +27,11 @@
                 <div class="flex-grow-1 ms-3 align-self-center">
                     <div class="row">
                     <div class="col-sm-5 mb-3 mb-sm-0">
-                        <h5><a class="text-dark" href="{% url "shop:product-detail" item.product_obj.slug %}">{{ item.product_obj.title }}</a></h5>                        
+                        <h5><a class="text-dark" href="{% url "shop:product-detail" item.product_obj.slug %}">{{ item.product_obj.title }}</a></h5>     
+                        <div class="text-body">
+                            <span class="small">قیمت هر واحد: </span>
+                            <span class="fw-semibold small">{{ item.product_obj.get_price|intcomma }} تومان</span>
+                        </div>                   
                         <div class="d-grid gap-1">
                         <div class="text-body">
                             <span class="small">دسته بندی: {% for category in item.product_obj.category.all %}
@@ -44,7 +48,7 @@
                     </div>
                     <!-- End Col -->
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-3 align-self-center">
                         <div class="row">
                         <div class="col-auto">
                             <!-- Select -->
@@ -64,12 +68,8 @@
                     </div>
                     <!-- End Col -->
 
-                    <div class="col-4 col-sm-4 d-none d-sm-inline-block text-right">
-                        {% if item.product_obj.discount_percent %}
-                        <span class="h6 d-block mb-1">{{ item.product_obj.get_price|intcomma }} تومان</span>
-                        {% else %}
-                        <span class="h6 d-block mb-1">{{ item.product_obj.price|intcomma }} تومان</span>
-                        {% endif %}
+                    <div class="col-4 col-sm-4 d-none d-sm-inline-block text-right align-self-center">
+                        <span class="h6 d-block mb-1">{{ item.total_price|intcomma }} تومان</span>
                         <div class="col-auto mt-4">
                             <div class="">
                             <a class="link-sm link-danger small" href="javascript:;">
