@@ -39,7 +39,7 @@
                 </h4>
                 {% if latest_product.discount_percent %}
                 <p class="card-text"><del>{{ latest_product.price|intcomma }} تومان</del></p>
-                <p class="card-text text-dark">{{ latest_product.get_price }} تومان</p>
+                <p class="card-text text-dark">{{ latest_product.get_price|intcomma }} تومان</p>
                 {% else %}
                 <p class="card-text text-dark">{{ latest_product.price|intcomma }} تومان</p>
                 {% endif %}

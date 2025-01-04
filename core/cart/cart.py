@@ -2,7 +2,6 @@ from shop.models import Product, StatusType
 
 
 class CartSession:
-    get_total_payment_price = 0
 
     def __init__(self, session):
         self.session = session
@@ -37,7 +36,7 @@ class CartSession:
             product_obj = Product.objects.get(
                 id=item["product_id"], status=StatusType.publish.value)
             item.update({"product_obj": product_obj,
-                        "total_price": item["quantity"] * product_obj.get_price()})
+                         "total_price": item["quantity"] * product_obj.get_price()})
         return self._cart["items"]
 
     def get_total_payment_amount(self):

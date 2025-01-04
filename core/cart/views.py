@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View, TemplateView
 from django.http import JsonResponse
 from .cart import CartSession
+from shop.models import ProductCategory
 
 
 class SessionAddProduct(View):

@@ -48,11 +48,6 @@ class Product(models.Model):
         final_amount = int(self.price) - discount_amount
         return int(final_amount)
 
-    def get_show_price(self):
-        discount_amount = int(self.price) * (self.discount_percent / 100)
-        final_amount = int(self.price) - discount_amount
-        return "{:,}".format(int(final_amount))
-
     class Meta:
         ordering = ["-created_at"]
 

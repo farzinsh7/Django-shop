@@ -73,7 +73,7 @@
             <div class="d-flex align-items-center">
             {% if object.discount_percent %}
             <span class="ms-2"><del>{{ object.price|intcomma  }} تومان</del></span>
-            <h3 class="mb-0">{{ object.get_price }} تومان</h3>
+            <h3 class="mb-0">{{ object.get_price|intcomma  }} تومان</h3>
             {% else %}
             <h3 class="mb-0">{{ object.price|intcomma  }} تومان</h3>
             {% endif %}
