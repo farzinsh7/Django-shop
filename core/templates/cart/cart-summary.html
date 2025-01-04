@@ -72,13 +72,13 @@
                         <span class="h6 d-block mb-1">{{ item.total_price|intcomma }} تومان</span>
                         <div class="col-auto mt-4">
                             <div class="">
-                            <a class="link-sm link-danger small" href="javascript:;">
+                            <button class="link-sm btn btn-icon link-danger " onclick="removeProduct({{item.product_id}})">
                                 <i class="bi-trash"></i> حذف
-                            </a>
+                            </button>
 
-                            <a class="link-sm link-secondary px-2 small" href="javascript:;">
+                            <button class="link-sm btn btn-icon link-secondary px-2">
                                 <i class="bi-heart-fill me-1 "></i>علایق
-                            </a>
+                            </button>
                             </div>
                         </div>
                     </div>
@@ -174,6 +174,23 @@
             data: {
                 product_id: product_id,
                 quantity: quantity,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+                console.log(response);
+                window.location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+    }
+    function removeProduct(product_id){
+        $.ajax({
+            url: '{% url "cart:session-remove-product" %}',
+            method: 'POST',
+            data: {
+                product_id: product_id,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             success: function (response) {
