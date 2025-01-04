@@ -5,7 +5,7 @@ from .cart import CartSession
 from shop.models import ProductCategory
 
 
-class SessionAddProduct(View):
+class SessionAddProductView(View):
 
     def post(self, request, *args, **kwargs):
         cart = CartSession(request.session)
@@ -15,7 +15,18 @@ class SessionAddProduct(View):
         return JsonResponse({"cart": cart.get_cart_dict(), "total_quantity": cart.get_total_quantity()})
 
 
-class SessionCartSummary(TemplateView):
+class SessionUpdateProductQuantityView(View):
+
+    def post(self, request, *args, **kwargs):
+        cart = CartSession(request.session)
+        product_id = request.POST.get("product_id")
+        quantity = request.POST.get("quantity")
+        if product_id and quantity:
+            cart.update_product_quantity(product_id, quantity)
+        return JsonResponse({"cart": cart.get_cart_dict(), "total_quantity": cart.get_total_quantity()})
+
+
+class SessionCartSummaryView(TemplateView):
     template_name = "cart/cart-summary.html"
 
     def get_context_data(self, **kwargs):
