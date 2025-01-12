@@ -12,7 +12,7 @@
             
             </div>
 
-            <h4 class="card-title mb-0">ناتالی کورتیس</h4>
+            <h4 class="card-title mb-0">{% if user.email %}{{ user.email }}{% else %}درود{% endif %}</h4>
             <p class="card-text small">Farzin@example.com</p>
         </div>
         <!-- End Avatar -->
@@ -23,15 +23,15 @@
         <!-- List -->
         <ul class="nav nav-sm nav-tabs nav-vertical mb-4">
             <li class="nav-item">
-            <a class="nav-link" href="{% url "dashboard:home" %}">
-                <i class="bi-person-badge nav-icon"></i>داشبورد
-            </a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="./account-security.html">
-                <i class="bi-shield-shaded nav-icon"></i> امنیت
-            </a>
-            </li>
+                <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url "dashboard:customer:home" %}">
+                    <i class="bi-person-badge nav-icon ="></i>داشبورد
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'security-edit' %}active{% endif %}" href="{% url "dashboard:customer:security-edit" %}">
+                    <i class="bi-shield-shaded nav-icon"></i> امنیت
+                </a>
+                </li>
 
             <li class="nav-item">
             <a class="nav-link" href="./account-overview.html">
