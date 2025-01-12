@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <!-- Required Meta Tags Always Come First -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!-- Title -->
+    <title>
+      {% block title %}داشبورد | ادمین{% endblock title%}
+    </title>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="{% static 'css/vendor.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap-icons/font/bootstrap-icons.css' %}">
+    <!-- CSS Front Template -->
+    <link rel="stylesheet" href="{% static 'css/theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <!-- CSS Toastify -->
+    <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
+    {% block extra_css %}{% endblock extra_css %} 
+    {% block extra_css_no_compress %}{% endblock extra_css_no_compress %}
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+  </head>
+  <body>
+    {% include "base/shared/header.html" %}
+    <!-- ========== MAIN CONTENT ========== -->
+    <main id="content" role="main">
+    {% block header %}{% endblock header %}
+    <!-- Content Section -->
+    <div class="container content-space-1 content-space-t-lg-0 content-space-b-lg-2 mt-lg-n10">
+      <div class="row">
+        <div class="col-lg-3">
+        {% include "dashboard/admin/sidebar.html" %}
+        </div>
+        <!-- End Col -->
+        <div class="col-lg-9">
+          {% block content %}{% endblock content %}
+        </div>
+      </div>
+    </div>
+    </main>
+    <!-- ========== END MAIN CONTENT ========== -->
+    {% include "base/shared/footer.html" %}
+    <!-- JS Jquery-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <!-- JS Implementing Plugins -->
+    <script src="{% static 'js/vendor.min.js' %}"></script>
+    <!-- JS Front -->
+    <script src="{% static 'js/theme.min.js' %}"></script>
+    <!-- JS Toastify -->
+    <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
+    <!-- JS Custom -->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- JS Plugins Init. -->
+    <script>
+      (function () {
+        // INITIALIZATION OF MEGA MENU
+        // =======================================================
+        new HSMegaMenu('.js-mega-menu', {
+          desktop: {
+            position: 'left'
+          }
+        })
+
+
+        // INITIALIZATION OF SHOW ANIMATIONS
+        // =======================================================
+        new HSShowAnimation('.js-animation-link')
+
+
+        // INITIALIZATION OF BOOTSTRAP VALIDATION
+        // =======================================================
+        HSBsValidation.init('.js-validate', {
+          onSubmit: data => {
+            data.event.preventDefault()
+            alert('Submited')
+          }
+        })
+
+
+        // INITIALIZATION OF BOOTSTRAP DROPDOWN
+        // =======================================================
+        HSBsDropdown.init()
+
+
+        // INITIALIZATION OF GO TO
+        // =======================================================
+        new HSGoTo('.js-go-to')
+
+
+        // INITIALIZATION OF SWIPER
+        // =======================================================
+        var sliderThumbs = new Swiper('.js-swiper-shop-hero-thumbs', {
+          watchSlidesVisibility: true,
+          watchSlidesProgress: true,
+          history: false,
+          slidesPerView: 3,
+          spaceBetween: 15,
+          on: {
+            beforeInit: (swiper) => {
+              const css = `.swiper-slide-thumb-active .swiper-thumb-progress .swiper-thumb-progress-path {
+                    opacity: 1;
+                    -webkit-animation: ${swiper.originalParams.autoplay.delay}ms linear 0ms forwards swiperThumbProgressDash;
+                    animation: ${swiper.originalParams.autoplay.delay}ms linear 0ms forwards swiperThumbProgressDash;
+                }`
+              style = document.createElement('style')
+              document.head.appendChild(style)
+              style.type = 'text/css'
+              style.appendChild(document.createTextNode(css));
+
+              swiper.el.querySelectorAll('.js-swiper-thumb-progress')
+                .forEach(slide => {
+                  slide.insertAdjacentHTML('beforeend', '<span class="swiper-thumb-progress"><svg version="1.1" viewBox="0 0 160 160"><path class="swiper-thumb-progress-path" d="M 79.98452083651917 4.000001576345426 A 76 76 0 1 1 79.89443752470656 4.0000733121155605 Z"></path></svg></span>')
+                })
+            },
+          },
+        });
+
+        var swiper = new Swiper('.js-swiper-shop-classic-hero', {
+          autoplay: true,
+          loop: true,
+          navigation: {
+            nextEl: '.js-swiper-shop-classic-hero-button-next',
+            prevEl: '.js-swiper-shop-classic-hero-button-prev',
+          },
+          thumbs: {
+            swiper: sliderThumbs
+          }
+        });
+
+
+        // INITIALIZATION OF COUNTDOWN
+        // =======================================================
+        const oneYearFromNow = new Date()
+
+        document.querySelectorAll('.js-countdown').forEach(item => {
+          const days = item.querySelector('.js-cd-days'),
+            hours = item.querySelector('.js-cd-hours'),
+            minutes = item.querySelector('.js-cd-minutes'),
+            seconds = item.querySelector('.js-cd-seconds')
+
+          countdown(oneYearFromNow.setFullYear(
+            oneYearFromNow.getFullYear() + 1),
+            ts => {
+              days.innerHTML = ts.days
+              hours.innerHTML = ts.hours
+              minutes.innerHTML = ts.minutes
+              seconds.innerHTML = ts.seconds
+            },
+            countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS
+          )
+        })
+      })()
+    </script>
+    {% include "messages.html" %} 
+    {% block extra_js %} {% endblock extra_js %} 
+    {% block extra_js_no_compress %} {% endblock extra_js_no_compress %}
+  </body>
+</html>
