@@ -69,7 +69,7 @@
               </button>
               <ul class="dropdown-menu" aria-labelledby="profile-dropdown">
                 {% if request.user.is_superuser %}<li><a class="dropdown-item" href="{% url "admin:index" %}">پنل ادمین</a></li>{% endif %}
-                <li><a class="dropdown-item" href="#">پروفایل</a></li>
+                <li><a class="dropdown-item" href="{% url "dashboard:home" %}">پروفایل</a></li>
                 <li><a class="dropdown-item" href="#">آدرس ها</a></li>
                 <li><a class="dropdown-item" href="#">سفارشات</a></li>
                 <li><hr class="dropdown-divider"></li>
