@@ -31,7 +31,41 @@
     {% include "base/shared/header.html" %}
     <!-- ========== MAIN CONTENT ========== -->
     <main id="content" role="main">
-        {% block header %}{% endblock header %}
+        <!-- Breadcrumb -->
+        <div class="navbar-dark bg-dark" style="background-image: url({% static 'svg/components/wave-pattern-light.svg' %});">
+            <div class="container content-space-1 content-space-b-lg-3">
+            <div class="row align-items-center">
+                <div class="col">
+                <div class="d-none d-lg-block">
+                    <h1 class="h2 text-white">داشبورد</h1>
+                </div>
+                {% block header %}{% endblock header %}
+                </div>
+                <!-- End Col -->
+                <div class="col-auto">
+                <div class="d-none d-lg-block">
+                    <a class="btn btn-soft-light btn-sm" href="{% url 'accounts:logout' %}">خروج</a>
+                </div>
+        
+                <!-- Responsive Toggle Button -->
+                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sidebarNav" aria-controls="sidebarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-default">
+                    <i class="bi-list"></i>
+                    </span>
+                    <span class="navbar-toggler-toggled">
+                    <i class="bi-x"></i>
+                    </span>
+                </button>
+                <!-- End Responsive Toggle Button -->
+                </div>
+                <!-- End Col -->
+            </div>
+            <!-- End Row -->
+            </div>
+        </div>
+        <!-- End Breadcrumb -->
         <!-- Content Section -->
         <div class="container content-space-1 content-space-t-lg-0 content-space-b-lg-2 mt-lg-n10">
             <div class="row">
