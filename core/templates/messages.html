@@ -19,7 +19,7 @@
         {% for error in field.errors %}
         <script>
             Toastify({
-                text: `{{ field.name }} - {{ error|escape }}`,
+                text: `{{ error|escape }}`,
                 className: "error",
                 style: {
                   background: "red",
