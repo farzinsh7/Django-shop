@@ -85,6 +85,6 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_profile(sender, **kwargs):
-    if kwargs['created'] and kwargs['instance'].type == UserType.customer.value:
+    if kwargs['created']:
         user_instance = kwargs['instance']
         Profile.objects.create(id=user_instance.id, user=user_instance)
