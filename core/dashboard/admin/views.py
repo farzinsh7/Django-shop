@@ -6,6 +6,8 @@ from .forms import AdminPasswordChangeForm, AdminProfileEditForm
 from dashboard.permissions import HasAdminAccessPermission
 from django.contrib.messages.views import SuccessMessageMixin
 from accounts.models import Profile
+from django.shortcuts import redirect
+from django.contrib import messages
 
 
 class AdminDashboardHomeView(LoginRequiredMixin, HasAdminAccessPermission, TemplateView):
@@ -28,3 +30,19 @@ class AdminProfileEditView(LoginRequiredMixin, HasAdminAccessPermission, Success
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
+
+
+class AdminProfileImageEditView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, UpdateView):
+    http_method_names = ["post"]
+    model = Profile
+    fields = ["avatar"]
+    success_url = reverse_lazy("dashboard:admin:profile-edit")
+    success_message = "بروزرسانی تصویر پروفایل با موفقیت انجام شد."
+
+    def get_object(self, queryset=None):
+        return Profile.objects.get(user=self.request.user)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request, "ارسال تصویر با مشکل مواجه شد! لطفا مجدد تلاش کنید.")
+        return redirect(reverse_lazy(self.success_url))

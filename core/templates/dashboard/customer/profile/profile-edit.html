@@ -27,30 +27,21 @@
   
             <div class="col-sm-9">
               <!-- Media -->
-              <div class="d-flex align-items-center">
+              <form action="{% url "dashboard:customer:profile-image-edit" %}" enctype="multipart/form-data" method="post" class="d-flex align-items-center">
+                {% csrf_token %}
                 <!-- Avatar -->
                 <label class="avatar avatar-xl avatar-circle" for="avatarUploader">
                   <img id="avatarImg" class="avatar-img" src="{{ request.user.user_profile.avatar.url }}"
                     alt="Image Description">
                 </label>
-  
                 <div class="d-grid d-sm-flex gap-2 me-4">
-                  <div class="form-attachment-btn btn btn-primary btn-sm">آپلود عکس
-                    <input type="file" class="js-file-attach form-attachment-btn-label" id="avatarUploader"
-                      data-hs-file-attach-options='{
-                              "textTarget": "#avatarImg",
-                              "mode": "image",
-                              "targetAttr": "src",
-                              "resetTarget": ".js-file-attach-reset-img",
-                              "resetImg": "./assets/img/160x160/img1.jpg",
-                              "allowTypes": [".png", ".jpeg", ".jpg"]
-                           }'>
+                  <div class="form-attachment-btn btn btn-white btn-sm">آپلود عکس
+                    <input type="file" name="avatar" class="form-attachment-btn-label" id="avatarUploader" accept="image/png, image/jpeg, image/jpg">
                   </div>
                   <!-- End Avatar -->
-  
-                  <button type="button" class="js-file-attach-reset-img btn btn-white btn-sm">حذف کردن</button>
+                  <button type="submit" class="btn btn-primary btn-sm">ارسال</button>
                 </div>
-              </div>
+              </form>
               <!-- End Media -->
             </div>
         </div>
@@ -116,3 +107,19 @@
   </div>
 <!-- End Card -->
 {% endblock content %}
+{% block extra_js %}
+<script>
+  document.getElementById('avatarUploader').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        document.getElementById('avatarImg').src = e.target.result; // Set the preview image source
+      };
+
+      reader.readAsDataURL(file); // Convert the file to a data URL
+    }
+  });
+</script>
+{% endblock extra_js %} 
