@@ -31,26 +31,28 @@
 
           <!-- Input Card -->
           <div class="col-md-5 py-1">
-            <input type="text" class="form-control" placeholder="جستجوی" aria-label="جستجوی ایمیل">
-
+            <input type="text" name="q" class="form-control" id="search-query-filter" placeholder="جستجوی" aria-label="جستجوی محصولات">
           </div>
           <!-- End Input Card -->
           <div class="col-md-3 py-1">
-            <select class="form-select">
-              <option value="Relevance" selected="">ارتباط</option>
-              <option value="mostRecent">اخیرا</option>
+            <select class="form-select" id="order-by-filter">
+                <option value="" selected>مرتب سازی</option>
+                <option value="-created_at">جدیدترین</option>
+                <option value="created_at">قدیمی ترین</option>
+                <option value="-price">بیشترین قیمت</option>
+                <option value="price">کمترین قیمت</option>
             </select>
           </div>
           <div class="col-md-3 py-1">
-            <select class="form-select">
-              <option value="Relevance" selected="">دسته بندی ها</option>
-              {% for item in categories %}
-              <option value="mostRecent">{{ item.title }}</option>
-              {% endfor %}
+            <select class="form-select" name="category_id" id="category-id-filter">
+                <option value="" selected>دسته بندی</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.title }}</option>
+                {% endfor %}
             </select>
           </div>
           <div class="col-md-1 py-1">
-            <button type="button" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
+            <button type="submit" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
           </div>
         </form>
 
@@ -76,11 +78,18 @@
             <tbody>
                 {% for object in object_list  %}
                 <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{ forloop.counter0|add:page_obj.start_index }}</th>
                     <td class="align-content-center"><img class="avatar avatar-xl avatar-4x3" src="{{ object.image.url }}" alt="{{ object.title }}"/></td>
                     <td class="align-content-center">{{ object.title }}</td>
                     {% comment %} <td>کیف</td> {% endcomment %}
-                    <td class="align-content-center">{{ object.price|intcomma }}</td>
+                    <td class="align-content-center">
+                        {% if object.discount_percent %}
+                        <del>{{ object.price|intcomma }}</del>
+                        {{ object.get_price|intcomma  }}
+                        {% else %}
+                        {{ object.price|intcomma }}
+                        {% endif %}
+                    </td>
                     <td class="align-content-center">{{ object.stock }}</td>
                     <td class="align-content-center">
                         {% if object.status == 2 %}
@@ -92,7 +101,9 @@
                     <td class="align-content-center">%{{object.discount_percent}}</td>
                     <td class="align-content-center">
                       <a class="btn btn-sm btn-icon btn-ghost-secondary" href="./admin-account-products-single.html"><i class="bi-pencil-square"></i></a>
-                      <a class="btn btn-sm btn-icon btn-ghost-primary" href="./product-overview.html"><i class="bi-eye"></i></a>
+                      {% if object.status == 2 %}
+                      <a class="btn btn-sm btn-icon btn-ghost-primary" href="{% url "shop:product-detail" slug=object.slug %}"><i class="bi-eye"></i></a>
+                      {% endif %}
                     </td>
                 </tr>
                 {% empty %}
@@ -140,3 +151,27 @@
 </div>
 <!-- End Card -->
 {% endblock content %}
+{% block extra_js %}
+<script>
+    $(document).ready(function(){
+        let current_url_params = new URLSearchParams(window.location.search)
+        $("#search-query-filter").val(current_url_params.get("q") || "")
+        $("#order-by-filter").val(current_url_params.get("order_by") || "")
+        $("#category-id-filter").val(current_url_params.get("category_id") || "")
+    })
+    $("#page-size-filter").change(function(){
+        let current_url_params = new URLSearchParams(window.location.search)
+        var selectedOption = $(this).val();
+        current_url_params.set("page_size", selectedOption)
+        let new_url = window.location.pathname + "?" + current_url_params.toString()
+        window.location.href = new_url
+    })
+    $("#order-by-filter").change(function(){
+        let current_url_params = new URLSearchParams(window.location.search)
+        var selectedOption = $(this).val();
+        current_url_params.set("order_by", selectedOption)
+        let new_url = window.location.pathname + "?" + current_url_params.toString()
+        window.location.href = new_url
+    })
+</script>
+{% endblock extra_js %}
