@@ -10,8 +10,6 @@ from . import models
 class ProductGridView(ListView):
     template_name = "shop/product-grid.html"
     paginate_by = 6
-    queryset = models.Product.objects.prefetch_related("category").filter(
-        status=models.StatusType.publish.value)
 
     def get_paginate_by(self, queryset):
 

@@ -1,0 +1,130 @@
+{% extends "dashboard/admin/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-light mb-0">
+    <li class="breadcrumb-item">حساب</li>
+    <li class="breadcrumb-item">داشبورد ادمین</li>
+    <li class="breadcrumb-item active" aria-current="page">لیست محصولات</li>
+  </ol>
+</nav>
+<!-- End Breadcrumb -->
+{% endblock header %}
+{% block content %}
+<!-- Card -->
+<div class="card">
+    <!-- Header -->
+    <div class="card-header border-bottom">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="">لیست محصولات</h5>
+        <a class="btn btn-primary" href="./admin-account-add-product.html">اضافه کردن</a>
+      </div>
+    </div>
+    <!-- End Header -->
+
+    <!-- Body -->
+    <div class="card-body">
+      <div class="container pb-5">
+        <form class="row">
+
+          <!-- Input Card -->
+          <div class="col-md-5 py-1">
+            <input type="text" class="form-control" placeholder="جستجوی" aria-label="جستجوی ایمیل">
+
+          </div>
+          <!-- End Input Card -->
+          <div class="col-md-3 py-1">
+            <select class="form-select">
+              <option value="Relevance" selected="">ارتباط</option>
+              <option value="mostRecent">اخیرا</option>
+            </select>
+          </div>
+          <div class="col-md-3 py-1">
+            <select class="form-select">
+              <option value="Relevance" selected="">دسته بندی ها</option>
+              <option value="mostRecent">کیف</option>
+            </select>
+          </div>
+          <div class="col-md-1 py-1">
+            <button type="button" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="row">
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">تصویر</th>
+                <th scope="col">نام</th>
+                {% comment %} <th scope="col">دسته بندی</th> {% endcomment %}
+                <th scope="col">قیمت</th>
+                <th scope="col">تعداد</th>
+                <th scope="col">وضعیت</th>
+                <th scope="col">تخفیف</th>
+                <th scope="col">عملیات</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for object in object_list  %}
+                <tr>
+                    <th scope="row">1</th>
+                    <td class="align-content-center"><img class="avatar avatar-xl avatar-4x3" src="{{ object.image.url }}" alt="{{ object.title }}"/></td>
+                    <td class="align-content-center">{{ object.title }}</td>
+                    {% comment %} <td>کیف</td> {% endcomment %}
+                    <td class="align-content-center">{{ object.price|intcomma }}</td>
+                    <td class="align-content-center">{{ object.stock }}</td>
+                    <td class="align-content-center">
+                        {% if object.status == 2 %}
+                        <span class="badge bg-success">نشر شده</span>
+                        {% else %}
+                        <span class="badge bg-danger">عدم انتشار</span>
+                        {% endif %}
+                    </td>
+                    <td class="align-content-center">%{{object.discount_percent}}</td>
+                    <td class="align-content-center">
+                      <a class="btn btn-sm btn-icon btn-ghost-secondary" href="./admin-account-products-single.html"><i class="bi-pencil-square"></i></a>
+                      <a class="btn btn-sm btn-icon btn-ghost-primary" href="./product-overview.html"><i class="bi-eye"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- End Table -->
+
+
+        <!-- Pagination -->
+        <div class="row pt-5 mt-3">
+          <nav aria-label="Page navigation py-3">
+            <ul class="pagination justify-content-center">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">قبلی</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item active"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">بعدی</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <!-- End Pagination -->
+
+
+
+      </div>
+      <!-- End Row -->
+
+    </div>
+    <!-- End Body -->
+</div>
+<!-- End Card -->
+{% endblock content %}
