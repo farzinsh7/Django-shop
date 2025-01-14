@@ -44,7 +44,9 @@
           <div class="col-md-3 py-1">
             <select class="form-select">
               <option value="Relevance" selected="">دسته بندی ها</option>
-              <option value="mostRecent">کیف</option>
+              {% for item in categories %}
+              <option value="mostRecent">{{ item.title }}</option>
+              {% endfor %}
             </select>
           </div>
           <div class="col-md-1 py-1">
@@ -93,33 +95,43 @@
                       <a class="btn btn-sm btn-icon btn-ghost-primary" href="./product-overview.html"><i class="bi-eye"></i></a>
                     </td>
                 </tr>
+                {% empty %}
+                <div class="row text-center w-100 py-5">
+                    <p class="text-center">هیچ کالایی برای نمایش وجود ندارد</p>
+                </div>
+                <!-- End Col -->
                 {% endfor %}
             </tbody>
           </table>
         </div>
         <!-- End Table -->
 
-
+        {% if page_obj.has_other_pages %}
         <!-- Pagination -->
         <div class="row pt-5 mt-3">
-          <nav aria-label="Page navigation py-3">
+        <nav aria-label="Page navigation py-3">
             <ul class="pagination justify-content-center">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">قبلی</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item active"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">بعدی</a>
-              </li>
-            </ul>
-          </nav>
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <button class="page-link" onclick="changePage({{ page_obj.previous_page_number }})">قبلی</button>
+            </li>
+            {% endif %}
+            {% for page in page_obj.paginator %}
+            {% if page.number == page_obj.number %}
+            <li class="page-item active"><button class="page-link" onclick="changePage({{ page.number }})">{{ page.number }}</button></li>
+            {% elif page.number > page_obj.number|add:'-3' and page.number < page_obj.number|add:'3' %}
+            <li class="page-item"><button class="page-link" onclick="changePage({{ page.number }})">{{ page.number }}</button></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <button class="page-link" onclick="changePage({{ page_obj.next_page_number }})" aria-label="Next">بعدی</button>
+                </li>
+            {% endif %}
+                </ul>
+            </nav>
         </div>
-        <!-- End Pagination -->
-
-
-
+        {% endif %}
       </div>
       <!-- End Row -->
 
