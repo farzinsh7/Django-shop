@@ -1,6 +1,24 @@
 {% extends "dashboard/admin/base.html" %}
 {% load static %}
 {% load humanize %}
+{% block extra_css %}
+<style>
+    .small-primary-button {
+        padding: 3px 10px;
+        background-color: #007bff; 
+        color: white; 
+        border: none; 
+        cursor: pointer; 
+        font-size: 10px;
+        border-radius: 5px; 
+    }
+    
+    .small-primary-button:hover,
+    .small-primary-button:focus {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock extra_css %}
 {% block header %}
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb">
@@ -24,81 +42,88 @@
 
     <!-- Body -->
     <div class="card-body">
-      <form>
+      <form action="." enctype="multipart/form-data" method="post">
+        {% csrf_token %}
         <div class="row d-flex ">
           <div class="col-md-6 mb-3">
-            <label for="validationValidInput1">کد محصول</label>
-            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+            <label>نام محصول</label>
+            {{form.title}}
           </div>
           <div class="col-md-6 mb-3">
-            <label for="validationValidInput1">نام محصول</label>
-            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+            <label>slug محصول - <button class="small-primary-button" type="button"
+                onclick="generateSlug()">ساخت slug</button> </label>
+            {{form.slug}}
           </div>
           <div class="col-md-6 mb-3">
-            <label for="validationValidInput1">تعداد</label>
-            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+            <label>دسته بندی</label>
+            {{form.category}}
           </div>
-
-          <div class="col-md-6 mb-3">
-            <label for="validationValidSelect1">وضعیت</label>
-            <select class="form-select is-valid" id="validationValidSelect1">
-              <option>Choose an option</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-            <span class="valid-feedback">Valid feedback</span>
+          <div class="col-md-3 mb-3">
+            <label>قیمت</label>
+            {{form.price}}
           </div>
-          <div class="col-md-6 mb-3">
-            <label for="validationValidSelect1">دسته بندی</label>
-            <select class="form-select is-valid" id="validationValidSelect1">
-              <option>Choose an option</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-            <span class="valid-feedback">Valid feedback</span>
+          <div class="col-md-3 mb-3">
+            <label>درصد تخفیف</label>
+            {{form.discount_percent}}
           </div>
           <div class="col-md-4 mb-3">
-            <label for="validationValidInput1">قیمت</label>
-            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+            <label>موجودی</label>
+            {{form.stock}}
           </div>
-          <div class="col-md-2 mb-3">
-            <label for="validationValidInput1">درصد تخفیف</label>
-            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+          <div class="col-md-4 mb-3">
+            <label>وضعیت نمایش</label>
+            {{form.status}}
           </div>
-
+          <div class="col-md-4 mb-3">
+            <label>کد انبار</label>
+            {{form.sku}}
+          </div>
           <div class="col-md-12 mb-3">
-            <label for="validationValidSelect1">توضیحات</label>
-            <div class="quill-custom">
-              <div class="js-quill" style="height: 15rem;" data-hs-quill-options='{
-                   "placeholder": "Type your message...",
-                    "modules": {
-                      "toolbar": [
-                        ["bold", "italic", "underline", "strike", "link", "image", "blockquote", "code", {"list": "bullet"}]
-                      ]
-                    }
-                   }'>ذهن خلاق در Htmlstream
-              </div>
+            <label>توضیحات</label>
+            {{form.description}}
             </div>
           </div>
-
           <div class="col-md-12 mb-3">
-            <label for="validationValidFileInput1">تصویر محصول</label>
-            <input type="file" id="validationValidFileInput1" class="form-control is-valid">
+            <label>توضیحات کوتاه</label>
+            {{form.short_description}}
+            </div>
           </div>
+          <div class="col-md-12 mb-3">
+            <label>تصویر</label>
+            {{form.image}}
+          </div>
+        </div>
+        <div class="card-footer">
+            <div class=" d-flex pt-5 justify-content-end">
+              <a class="btn btn-danger ms-3">حذف</a>
+              <a class="btn btn-secondary ms-3" href="{% url "dashboard:admin:product-list" %}">بازگشت</a>
+              <button type="submit" class="btn btn-primary ms-3">ثبت تغییرات</button>
+            </div>
         </div>
       </form>
     </div>
 </div>
-<div class="card-footer">
-    <div class=" d-flex pt-5 justify-content-end">
-      <a class="btn btn-danger ms-3">حذف</a>
-      <a class="btn btn-secondary ms-3" href="./admin-account-products.html">بازگشت</a>
-      <a class="btn btn-primary ms-3">ثبت تغییرات</a>
-    </div>
-</div>
+
 <!-- End Body -->
 {% endblock content %}
+{% block extra_js %}
+<script>
+    function generateSlug() {
+        const title = $("#id_title").val();
+        const slug = slugify(title);
+        $("#id_slug").val(slug)
+    }
+    function slugify(titleStr) {
+        titleStr = titleStr.replace(/^\s+|\s+$/g, '');
+        titleStr = titleStr.toLowerCase();
+        //persian support
+        titleStr = titleStr.replace(/[^a-z0-9_\s-ءاأإآؤئبتثجحخدذرزسشصضطظعغفقكلمنهويةى]#u/, '')
+            // Collapse whitespace and replace by -
+            .replace(/\s+/g, '-')
+            // Collapse dashes
+            .replace(/-+/g, '-');
+        slugStr = titleStr;
+        return slugStr;
+    }
+</script>
+{% endblock extra_js %}
