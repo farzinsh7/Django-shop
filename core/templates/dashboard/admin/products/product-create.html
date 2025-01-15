@@ -26,7 +26,7 @@
     <li class="breadcrumb-item">حساب</li>
     <li class="breadcrumb-item">داشبورد ادمین</li>
     <li class="breadcrumb-item">محصولات</li>
-    <li class="breadcrumb-item active" aria-current="page">ویرایش محصول</li>
+    <li class="breadcrumb-item active" aria-current="page">افزودن محصول</li>
   </ol>
 </nav>
 <!-- End Breadcrumb -->
@@ -35,11 +35,8 @@
 <!-- Card -->
 <div class="card">
     <!-- Header -->
-    <div class="card-header border-bottom d-flex justify-content-between align-items-center">
-      <h5 class="card-header-title">ویرایش محصول</h5>
-      {% if object.status == 2 %}
-      <a class="btn btn-primary" target="_blank" href="{% url "shop:product-detail" slug=object.slug %}"><i class="bi-eye"></i></a>
-      {% endif %}
+    <div class="card-header border-bottom">
+      <h5 class="card-header-title">افزودن محصول</h5>
     </div>
     <!-- End Header -->
 
@@ -92,7 +89,7 @@
             </div>
           </div>
           <div class="col-md-6 mb-3">
-            <img id="img-preview" class="avatar avatar-xl avatar-4x3" src="{{ object.image.url }}" alt="">
+            <img id="img-preview" class="avatar avatar-xl avatar-4x3" src="/media/products/images.png" alt="">
           </div>
           <div class="col-md-6 mb-3">
             <label>تصویر</label>
@@ -101,9 +98,8 @@
         </div>
         <div class="card-footer">
             <div class=" d-flex pt-5 justify-content-end">
-              <a class="btn btn-danger ms-3" href="{% url "dashboard:admin:product-delete" pk=object.pk %}">حذف</a>
               <a class="btn btn-secondary ms-3" href="{% url "dashboard:admin:product-list" %}">بازگشت</a>
-              <button type="submit" class="btn btn-primary ms-3">ثبت تغییرات</button>
+              <button type="submit" class="btn btn-primary ms-3">افزودن محصول</button>
             </div>
         </div>
       </form>

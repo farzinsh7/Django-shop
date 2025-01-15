@@ -19,7 +19,7 @@
     <div class="card-header border-bottom">
       <div class="d-flex justify-content-between align-items-center">
         <h5 class="">لیست محصولات</h5>
-        <a class="btn btn-primary" href="./admin-account-add-product.html">اضافه کردن</a>
+        <a class="btn btn-primary" href="{% url "dashboard:admin:product-create" %}">افزودن محصول</a>
       </div>
     </div>
     <!-- End Header -->
@@ -101,6 +101,7 @@
                     <td class="align-content-center">%{{object.discount_percent}}</td>
                     <td class="align-content-center">
                       <a class="btn btn-sm btn-icon btn-ghost-secondary" href="{% url "dashboard:admin:product-edit" pk=object.pk %}"><i class="bi-pencil-square"></i></a>
+                      <a class="btn btn-sm btn-icon btn-ghost-danger" href="{% url "dashboard:admin:product-delete" pk=object.pk %}"><i class="bi-trash"></i></a>
                       {% if object.status == 2 %}
                       <a class="btn btn-sm btn-icon btn-ghost-primary" target="_blank" href="{% url "shop:product-detail" slug=object.slug %}"><i class="bi-eye"></i></a>
                       {% endif %}
