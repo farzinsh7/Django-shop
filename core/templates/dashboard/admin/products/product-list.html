@@ -100,9 +100,9 @@
                     </td>
                     <td class="align-content-center">%{{object.discount_percent}}</td>
                     <td class="align-content-center">
-                      <a class="btn btn-sm btn-icon btn-ghost-secondary" href="./admin-account-products-single.html"><i class="bi-pencil-square"></i></a>
+                      <a class="btn btn-sm btn-icon btn-ghost-secondary" href="{% url "dashboard:admin:product-edit" pk=object.pk %}"><i class="bi-pencil-square"></i></a>
                       {% if object.status == 2 %}
-                      <a class="btn btn-sm btn-icon btn-ghost-primary" href="{% url "shop:product-detail" slug=object.slug %}"><i class="bi-eye"></i></a>
+                      <a class="btn btn-sm btn-icon btn-ghost-primary" target="_blank" href="{% url "shop:product-detail" slug=object.slug %}"><i class="bi-eye"></i></a>
                       {% endif %}
                     </td>
                 </tr>
@@ -114,6 +114,7 @@
                 {% endfor %}
             </tbody>
           </table>
+          <p>تعداد محصولات {{total_items}}</p>
         </div>
         <!-- End Table -->
 

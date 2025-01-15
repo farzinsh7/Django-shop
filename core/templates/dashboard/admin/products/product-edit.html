@@ -1,0 +1,104 @@
+{% extends "dashboard/admin/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-light mb-0">
+    <li class="breadcrumb-item">حساب</li>
+    <li class="breadcrumb-item">داشبورد ادمین</li>
+    <li class="breadcrumb-item">محصولات</li>
+    <li class="breadcrumb-item active" aria-current="page">ویرایش محصول</li>
+  </ol>
+</nav>
+<!-- End Breadcrumb -->
+{% endblock header %}
+{% block content %}
+<!-- Card -->
+<div class="card">
+    <!-- Header -->
+    <div class="card-header border-bottom">
+      <h5 class="card-header-title">ویرایش/ساخت محصول</h5>
+    </div>
+    <!-- End Header -->
+
+    <!-- Body -->
+    <div class="card-body">
+      <form>
+        <div class="row d-flex ">
+          <div class="col-md-6 mb-3">
+            <label for="validationValidInput1">کد محصول</label>
+            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="validationValidInput1">نام محصول</label>
+            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="validationValidInput1">تعداد</label>
+            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="validationValidSelect1">وضعیت</label>
+            <select class="form-select is-valid" id="validationValidSelect1">
+              <option>Choose an option</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <span class="valid-feedback">Valid feedback</span>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="validationValidSelect1">دسته بندی</label>
+            <select class="form-select is-valid" id="validationValidSelect1">
+              <option>Choose an option</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <span class="valid-feedback">Valid feedback</span>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="validationValidInput1">قیمت</label>
+            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+          </div>
+          <div class="col-md-2 mb-3">
+            <label for="validationValidInput1">درصد تخفیف</label>
+            <input type="text" class="form-control is-valid" id="validationValidInput1" placeholder="">
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label for="validationValidSelect1">توضیحات</label>
+            <div class="quill-custom">
+              <div class="js-quill" style="height: 15rem;" data-hs-quill-options='{
+                   "placeholder": "Type your message...",
+                    "modules": {
+                      "toolbar": [
+                        ["bold", "italic", "underline", "strike", "link", "image", "blockquote", "code", {"list": "bullet"}]
+                      ]
+                    }
+                   }'>ذهن خلاق در Htmlstream
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label for="validationValidFileInput1">تصویر محصول</label>
+            <input type="file" id="validationValidFileInput1" class="form-control is-valid">
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+<div class="card-footer">
+    <div class=" d-flex pt-5 justify-content-end">
+      <a class="btn btn-danger ms-3">حذف</a>
+      <a class="btn btn-secondary ms-3" href="./admin-account-products.html">بازگشت</a>
+      <a class="btn btn-primary ms-3">ثبت تغییرات</a>
+    </div>
+</div>
+<!-- End Body -->
+{% endblock content %}

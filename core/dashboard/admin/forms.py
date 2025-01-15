@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Profile
+from shop.models import Product
 
 
 class AdminPasswordChangeForm(PasswordChangeForm):
@@ -39,3 +40,21 @@ class AdminProfileEditForm(forms.ModelForm):
         self.fields['first_name'].widget.attrs['placeholder'] = "نام"
         self.fields['last_name'].widget.attrs['placeholder'] = "نام خانوادگی"
         self.fields['phone_number'].widget.attrs['placeholder'] = "شماره همراه"
+
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = [
+            "title",
+            "slug",
+            "category",
+            "image",
+            "description",
+            "short_description",
+            "stock",
+            "status",
+            "sku",
+            "price",
+            "discount_percent",
+        ]
