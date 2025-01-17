@@ -33,7 +33,6 @@ class RegisterView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.is_active = False  # Optional: Require email verification to activate
         user.save()
 
         # Generate a signed token
@@ -59,7 +58,6 @@ class VerifyEmailView(View):
             user_id = signer.unsign(token)
             user = User.objects.get(pk=user_id)
             user.is_verified = True
-            user.is_active = True
             user.save()
             return render(request, 'accounts/verification_success.html')
         except (BadSignature, User.DoesNotExist):
