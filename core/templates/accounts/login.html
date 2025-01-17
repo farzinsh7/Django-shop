@@ -1,9 +1,11 @@
-{% extends "base/base.html" %}
-{% block title %}Login Page{% endblock title%}
+{% extends "base/base.html" %} 
+{% block title %}Login Page{% endblock title%} 
 {% block content %}
 <!-- Form -->
-<div class="container content-space-3 content-space-t-lg-4 content-space-b-lg-3">
-  <div class="flex-grow-1 mx-auto" style="max-width: 28rem;">
+<div
+  class="container content-space-3 content-space-t-lg-4 content-space-b-lg-3"
+>
+  <div class="flex-grow-1 mx-auto" style="max-width: 28rem">
     <!-- Heading -->
     <div class="text-center mb-5 mb-md-7">
       <h1 class="h2">فرم ورود</h1>
@@ -13,28 +15,45 @@
 
     <!-- Form -->
     <form action='{% url "accounts:login" %}' method="post">
-        {% csrf_token %}
+      {% csrf_token %}
       <!-- Form -->
       <div class="mb-4">
         <label class="form-label">ایمیل شما</label>
-        <input type="email" class="form-control form-control-lg text-center" name="username"
-          id="signupSimpleLoginEmail" placeholder="email@site.com" aria-label="email@site.com" required>
-        <span class="invalid-feedback">لطفا یک آدرس ایمیل معتبر وارد کنید.</span>
+        <input
+          type="email"
+          class="form-control form-control-lg text-center"
+          name="username"
+          id="signupSimpleLoginEmail"
+          placeholder="email@site.com"
+          aria-label="email@site.com"
+          required
+        />
+        <span class="invalid-feedback"
+          >لطفا یک آدرس ایمیل معتبر وارد کنید.</span
+        >
       </div>
       <!-- End Form -->
 
       <!-- Form -->
       <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center">
-          <label class="form-label" >کلمه عبور</label>
-
+          <label class="form-label">کلمه عبور</label>
         </div>
 
         <div class="input-group input-group-merge">
-          <input type="password" class="form-control form-control-lg text-center" name="password"
-             placeholder="8+ characters required" aria-label="8+ characters required"
-            required >
-          <a id="changePassTarget" class="input-group-append input-group-text" href="javascript:;">
+          <input
+            type="password"
+            class="form-control form-control-lg text-center"
+            name="password"
+            placeholder="8+ characters required"
+            aria-label="8+ characters required"
+            required
+          />
+          <a
+            id="changePassTarget"
+            class="input-group-append input-group-text"
+            href="javascript:;"
+          >
             <i id="changePassIcon" class="bi-eye"></i>
           </a>
         </div>
@@ -44,16 +63,23 @@
       <!-- End Form -->
 
       <div class="d-grid mb-3">
-        <a class="form-label-link" href="./page-reset-password-simple.html">رمز عبور را فراموش کرده اید؟</a>
+        <a class="form-label-link" href="./page-reset-password-simple.html"
+          >رمز عبور را فراموش کرده اید؟</a
+        >
         <button type="submit" class="btn btn-primary btn-lg">ورود</button>
       </div>
 
       <div class="text-center">
-        <p>حساب کاربری ندارید؟ <a class="link" href="./page-signup-simple.html">اینجا ثبت نام کنید</a></p>
+        <p>
+          حساب کاربری ندارید؟
+          <a class="link" href="{% url "accounts:register" %}"
+            >اینجا ثبت نام کنید</a
+          >
+        </p>
       </div>
     </form>
     <!-- End Form -->
   </div>
 </div>
 <!-- End Form -->
- {% endblock content %}
+{% endblock content %}
