@@ -124,17 +124,15 @@
                     <p>سوال یا نظرات خود را مطرح کنین</p>
                 </div>
                 <!-- End Heading -->
-
                 <!-- Form -->
-                <form>
+                <form action="{% url 'website:contact' %}" method="post">
+                    {% csrf_token %}
                     <div class="row gx-3">
                         <div class="col-sm-6">
                             <!-- Form -->
                             <div class="mb-3">
                                 <label class="form-label" for="hireUsFormFirstName">نام</label>
-                                <input type="text" class="form-control form-control-lg"
-                                    name="hireUsFormNameFirstName" id="hireUsFormFirstName"
-                                    placeholder="نام" aria-label="First name">
+                                {{form.first_name}}
                             </div>
                             <!-- End Form -->
                         </div>
@@ -144,9 +142,7 @@
                             <!-- Form -->
                             <div class="mb-3">
                                 <label class="form-label" for="hireUsFormLasttName">نام خانوادگی</label>
-                                <input type="text" class="form-control form-control-lg"
-                                    name="hireUsFormNameLastName" id="hireUsFormLasttName"
-                                    placeholder="نام خانوادگی" aria-label="Last name">
+                                {{form.last_name}}
                             </div>
                             <!-- End Form -->
                         </div>
@@ -159,9 +155,7 @@
                             <!-- Form -->
                             <div class="mb-3">
                                 <label class="form-label" for="hireUsFormWorkEmail">آدرس ایمیل</label>
-                                <input type="email" class="form-control form-control-lg"
-                                    name="hireUsFormNameWorkEmail" id="hireUsFormWorkEmail"
-                                    placeholder="email@site.com" aria-label="email@site.com">
+                                {{form.email}}
                             </div>
                             <!-- End Form -->
                         </div>
@@ -172,9 +166,7 @@
                             <div class="mb-3">
                                 <label class="form-label" for="hireUsFormPhone">شماره همراه <span
                                         class="form-label-secondary">(اختیاری)</span></label>
-                                <input type="text" class="form-control form-control-lg"
-                                    name="hireUsFormNamePhone" id="hireUsFormPhone"
-                                    placeholder="+9891200000">
+                                {{form.phone}}
                             </div>
                             <!-- End Form -->
                         </div>
@@ -185,18 +177,12 @@
                     <!-- Form -->
                     <div class="mb-3">
                         <label class="form-label" for="hireUsFormDetails">توضیحات</label>
-                        <textarea class="form-control form-control-lg" name="hireUsFormNameDetails"
-                            id="hireUsFormDetails" placeholder="توضیحات خود را وارد نمایید"
-                            aria-label="Tell us about your ..." rows="4"></textarea>
+                        {{form.description}}
                     </div>
                     <!-- End Form -->
 
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary btn-lg">ارسال درخواست</button>
-                    </div>
-
-                    <div class="text-center">
-                        <p class="form-text">تیکت ها در اسرع وقت پاسخ داده خواهند شد</p>
                     </div>
                 </form>
                 <!-- End Form -->
