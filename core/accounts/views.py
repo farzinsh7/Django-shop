@@ -11,6 +11,7 @@ from django.shortcuts import redirect, render
 from django.core.signing import BadSignature
 from .models import User
 from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
 
 
 signer = Signer()
@@ -72,6 +73,17 @@ class PasswordResetView(SuccessMessageMixin, auth_view.PasswordResetView):
     title = _("بازیابی رمز عبور")
     success_message = "لینک بازیابی به ایمیل شما ارسال شد."
 
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        # Adjust for custom user model if needed
+        user_exists = User.objects.filter(email=email).exists()
+        if user_exists:
+            # messages.success(self.request, self.success_message)
+            return super().form_valid(form)  # Proceed with sending the email
+        else:
+            form.add_error("email", _("ایمیل وارد شده در سیستم ثبت نشده است."))
+            return self.form_invalid(form)
+
 
 class PasswordResetDoneView(auth_view.PasswordResetDoneView):
     template_name = "accounts/password_reset_done.html"
@@ -82,6 +94,16 @@ class PasswordResetConfirmView(SuccessMessageMixin, auth_view.PasswordResetConfi
     success_url = reverse_lazy("accounts:password_reset_complete")
     template_name = "accounts/password_reset_confirm.html"
     title = _("رمز عبور جدید را وارد نمایید.")
+    success_message = "رمز عبور شما با موفقیت تغییر پیدا کرد."
+
+    def form_valid(self, form):
+        messages.success(self.request, self.success_message)
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _(
+            "رمز عبور جدید معتبر نیست. لطفاً خطاها را بررسی کنید و دوباره تلاش کنید."))
+        return super().form_invalid(form)
 
 
 class PasswordResetCompleteView(auth_view.PasswordResetCompleteView):
