@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.shortcuts import redirect, render
 from django.core.signing import BadSignature
 from .models import User
+from django.utils.translation import gettext_lazy as _
 
 
 signer = Signer()
@@ -62,3 +63,27 @@ class VerifyEmailView(View):
             return render(request, 'accounts/verification_success.html')
         except (BadSignature, User.DoesNotExist):
             return render(request, 'accounts/verification_failed.html')
+
+
+class PasswordResetView(SuccessMessageMixin, auth_view.PasswordResetView):
+    email_template_name = "accounts/email/password_reset_email.html"
+    success_url = reverse_lazy("accounts:password_reset_done")
+    template_name = "accounts/password_reset_form.html"
+    title = _("بازیابی رمز عبور")
+    success_message = "لینک بازیابی به ایمیل شما ارسال شد."
+
+
+class PasswordResetDoneView(auth_view.PasswordResetDoneView):
+    template_name = "accounts/password_reset_done.html"
+    title = _("Password reset sent")
+
+
+class PasswordResetConfirmView(SuccessMessageMixin, auth_view.PasswordResetConfirmView):
+    success_url = reverse_lazy("accounts:password_reset_complete")
+    template_name = "accounts/password_reset_confirm.html"
+    title = _("رمز عبور جدید را وارد نمایید.")
+
+
+class PasswordResetCompleteView(auth_view.PasswordResetCompleteView):
+    template_name = "accounts/password_reset_complete.html"
+    title = _("رمز عبور شما با موفقیت تغغیر یافت.")
