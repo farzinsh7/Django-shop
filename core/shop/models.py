@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from decimal import Decimal
 
 
 class StatusType(models.IntegerChoices):
@@ -44,12 +45,9 @@ class Product(models.Model):
         return self.title
 
     def get_price(self):
-        if self.discount_percent:
-            discount_amount = int(self.price) * (self.discount_percent / 100)
-            final_amount = int(self.price) - discount_amount
-        else:
-            final_amount = int(self.price)
-        return int(final_amount)
+        discount_amount = self.price * Decimal(self.discount_percent / 100)
+        discounted_amount = self.price - discount_amount
+        return round(discounted_amount)
 
     class Meta:
         ordering = ["-created_at"]

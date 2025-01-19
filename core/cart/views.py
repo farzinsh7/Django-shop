@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.views.generic import View, TemplateView
 from django.http import JsonResponse
 from .cart import CartSession
-from shop.models import ProductCategory
+from shop.models import ProductCategory, Product
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
 
 
 class SessionAddProductView(View):
@@ -10,8 +12,21 @@ class SessionAddProductView(View):
     def post(self, request, *args, **kwargs):
         cart = CartSession(request.session)
         product_id = request.POST.get("product_id")
+
         if product_id:
+            product = get_object_or_404(Product, id=product_id)
+
+            if product.stock <= 0:
+                return JsonResponse({
+                    "error": True,
+                    "messages": ["محصول انتخابی شما فاقد موجودی می باشد."]
+                }, status=400)
+
             cart.add_product(product_id)
+
+        if request.user.is_authenticated:
+            cart.merge_session_cart_in_db(request.user)
+
         return JsonResponse({"cart": cart.get_cart_dict(), "total_quantity": cart.get_total_quantity()})
 
 

@@ -127,12 +127,40 @@
               csrfmiddlewaretoken: '{{ csrf_token }}'
           },
           success: function (response) {
-              $("#total-cart-item-count").html(response.total_quantity)
-              console.log(response);
+              if (!response.error) {
+                  // Update the total cart item count dynamically
+                  $("#total-cart-item-count").html(response.total_quantity);
+
+                  // Display success messages
+                  if (response.messages) {
+                      response.messages.forEach(function(message) {
+                          Toastify({
+                              text: message,
+                              className: "success",
+                              style: {
+                                  background: "blue"
+                              }
+                          }).showToast();
+                      });
+                  }
+              }
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-              console.log(errorThrown);
+          error: function (jqXHR) {
+              let response = jqXHR.responseJSON;
+              if (response && response.messages) {
+                  // Display error messages
+                  response.messages.forEach(function(message) {
+                      Toastify({
+                          text: message,
+                          className: "error",
+                          style: {
+                              background: "red"
+                          }
+                      }).showToast();
+                  });
+              }
           }
       });
   }
 </script>
+

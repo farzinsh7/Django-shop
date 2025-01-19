@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load humanize %}
 {% block title %}فروشگاه | تسویه حساب{% endblock title%}
 {% block content %}
 <!-- Content -->
@@ -18,8 +19,8 @@
              {% for address in addresses %}
               <div class="form-check">
                 <h4 class="form-check-label mt-2">{{address.title}}</h4>
-                <input type="radio" class="form-check-input" name="address">
-                <label class="form-check-label" for="address" value="{{address.id}}">{{address.state}}, {{address.city}}, {{address.address}}</label>
+                <input type="radio" class="form-check-input" name="address_id" value="{{address.id}}">
+                <label class="form-check-label" for="address">{{address.state}}, {{address.city}}, {{address.address}}</label>
                 <p class="form-check-label mt-2">کد پستی: {{ address.zip_code }}</p>
               </div>
              {% endfor %}
@@ -109,7 +110,7 @@
 
                   <dl class="row">
                     <dt class="col-sm-6">جمع کل</dt>
-                    <dd class="col-sm-6 text-sm-end mb-0">450000 تومان</dd>
+                    <dd class="col-sm-6 text-sm-end mb-0">{{ total_price|intcomma }} تومان</dd>
                   </dl>
                   <!-- End Row -->
                 </div>
