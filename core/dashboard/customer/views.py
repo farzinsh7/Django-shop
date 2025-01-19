@@ -2,12 +2,14 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView, ListView, CreateView, UpdateView, DeleteView
 from dashboard.permissions import HasCustomerAccessPermission
-from .forms import CustomerPasswordChangeForm, CustomerProfileEditForm
+from .forms import CustomerPasswordChangeForm, CustomerProfileEditForm, UserAddressForm
 from accounts.models import Profile
 from django.contrib import messages
 from django.shortcuts import redirect
+from order.models import UserAddress
+from django.core import exceptions
 
 
 class CustomerDashboardHomeView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
@@ -46,3 +48,63 @@ class CustomerProfileImageEditView(LoginRequiredMixin, HasCustomerAccessPermissi
         messages.error(
             self.request, "ارسال تصویر با مشکل مواجه شد! لطفا مجدد تلاش کنید.")
         return redirect(reverse_lazy(self.success_url))
+
+
+class CustomerAddressCreateView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, CreateView):
+    template_name = "dashboard/customer/address/address-create.html"
+    form_class = UserAddressForm
+    success_message = "آدرس با موفقیت ثبت گردید."
+
+    def get_queryset(self):
+        return UserAddress.objects.filter(user=self.request.user)
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        super().form_valid(form)
+        return redirect(reverse_lazy("dashboard:customer:address-edit", kwargs={"pk": form.instance.pk}))
+
+    def get_success_url(self):
+        return reverse_lazy("dashboard:customer:address-list")
+
+
+class CustomerAddressListView(LoginRequiredMixin, HasCustomerAccessPermission, ListView):
+    template_name = "dashboard/customer/address/address-list.html"
+    paginate_by = 10
+
+    def get_paginate_by(self, queryset):
+
+        return self.request.GET.get('page_size', self.paginate_by)
+
+    def get_queryset(self):
+        queryset = UserAddress.objects.filter(user=self.request.user)
+        if search_q := self.request.GET.get("q"):
+            queryset = queryset.filter(title__icontains=search_q)
+        if order_by := self.request.GET.get("order_by"):
+            try:
+                queryset = queryset.order_by(order_by)
+            except exceptions.FieldError:
+                pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_items'] = self.get_queryset().count()
+        return context
+
+
+class CustomerAddressEditView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, UpdateView):
+    template_name = "dashboard/customer/address/address-edit.html"
+    form_class = UserAddressForm
+    success_message = "آدرس با موفقیت ویرایش گردید."
+
+    def get_queryset(self):
+        return UserAddress.objects.filter(user=self.request.user)
+
+
+class CustomerAddressDeleteView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, DeleteView):
+    template_name = "dashboard/customer/address/address-delete.html"
+    success_message = "آدرس انتخابی با موفقیت حذف گردید."
+    success_url = reverse_lazy("dashboard:customer:address-list")
+
+    def get_queryset(self):
+        return UserAddress.objects.filter(user=self.request.user)

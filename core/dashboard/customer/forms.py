@@ -2,6 +2,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.utils.translation import gettext_lazy as _
 from django import forms
 from accounts.models import Profile
+from order.models import UserAddress
 
 
 class CustomerPasswordChangeForm(PasswordChangeForm):
@@ -39,3 +40,13 @@ class CustomerProfileEditForm(forms.ModelForm):
         self.fields['first_name'].widget.attrs['placeholder'] = "نام"
         self.fields['last_name'].widget.attrs['placeholder'] = "نام خانوادگی"
         self.fields['phone_number'].widget.attrs['placeholder'] = "شماره همراه"
+
+
+class UserAddressForm(forms.ModelForm):
+    class Meta:
+        model = UserAddress
+        fields = ['address',
+                  'state',
+                  'city',
+                  'zip_code'
+                  ]
