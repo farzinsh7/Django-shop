@@ -93,8 +93,11 @@
 
                     <dl class="row">
                       <dt class="col-sm-6">هزینه ارسال</dt>
-                      <dd class="col-sm-12 text-sm-end mb-0">برای تهران و حومه 35000 تومان</dd>
-                      <dd class="col-sm-12 text-sm-end mb-0">برای شهرستان ها 50000 تومان</dd>
+                      {% if shipping_cost %}
+                      <dd class="col-sm-12 text-sm-end mb-0">{{shipping_cost|intcomma}} تومان</dd>
+                      {% else %}
+                      <dd class="col-sm-12 text-sm-end mb-0">رایگان</dd>
+                      {% endif %}
                     </dl>
                     <!-- End Row -->
                   </div>
@@ -102,8 +105,8 @@
 
                 <div class="d-grid gap-3 mb-4">
                   <dl class="row">
-                    <dt class="col-sm-6">مالیات تخمینی</dt>
-                    <dd class="col-sm-12 text-sm-end mb-0">با ضریب 9% - 35000 تومان</dd>
+                    <dt class="col-sm-6">مالیات</dt>
+                    <dd class="col-sm-12 text-sm-end mb-0">{{ total_tax|intcomma }} تومان</dd>
 
                   </dl>
                   <!-- End Row -->
