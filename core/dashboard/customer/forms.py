@@ -45,7 +45,8 @@ class CustomerProfileEditForm(forms.ModelForm):
 class UserAddressForm(forms.ModelForm):
     class Meta:
         model = UserAddress
-        fields = ['address',
+        fields = ['title',
+                  'address',
                   'state',
                   'city',
                   'zip_code'
