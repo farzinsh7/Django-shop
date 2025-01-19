@@ -6,9 +6,7 @@
   <ol class="breadcrumb breadcrumb-light mb-0">
     <li class="breadcrumb-item">حساب</li>
     <li class="breadcrumb-item">داشبورد کاربری</li>
-    <li class="breadcrumb-item active" aria-current="page">
-       مدیریت آدرس ها 
-    </li>
+    <li class="breadcrumb-item active" aria-current="page">افزدن آدرس</li>
   </ol>
 </nav>
 <!-- End Breadcrumb -->
@@ -16,53 +14,47 @@
 {% block content %}
 <!-- Card -->
 <div class="card">
-    <!-- Header -->
-    <div class="card-header border-bottom">
-      <h5 class="card-header-title">آدرس های من</h5>
-    </div>
-    <!-- End Header -->
+  <!-- Header -->
+  <div class="card-header border-bottom">
+    <h5 class="card-header-title">افزودن آدرس</h5>
+  </div>
+  <!-- End Header -->
 
-    <!-- Body -->
-    <div class="card-body">
-      <div class="row">
-        <div class="col-sm-12 mb-5 mb-sm-7">
-          <!-- Radio Check -->
-          <div class=" w-100 h-100">
-            <label class="" for="billingRadio1">
-              <span class="h5 d-block">آدرس قبض #1</span>
-
-              <span class="d-block mb-2"> 45 تراس روکر چرخ لاترون KW5 8NW، لندن UK </span>
-              <a class="btn btn-white btn-xs" href="#">
-                <i class="bi-pencil-fill me-1"></i> آدرس را ویرایش
-                کنید
-              </a>
-            </label>
-          </div>
-          <!-- End Radio Check -->
+  <!-- Body -->
+  <div class="card-body">
+    <form action="." method="post">
+      {% csrf_token %}
+      <div class="row d-flex ">
+        <div class="col-md-6 mb-3">
+          <label>عنوان آدرس</label>
+          {{form.title}}
         </div>
-        <!-- End Col -->
-
-
-
-        <div class="col-sm-12 mb-5 mb-sm-7">
-          <!-- Card -->
-          <a class="card card-dashed card-centered" href="javascript:;" data-bs-toggle="modal"
-            data-bs-target="#accountAddAddressModal">
-            <div class="card-body card-dashed-body py-8">
-              <img class="avatar avatar-lg avatar-4x3 mb-2" src="./assets/svg/illustrations/oc-address.svg"
-                alt="Image Description" />
-              <span class="d-block"><i class="bi-plus"></i> یک آدرس جدید اضافه کنید</span>
-            </div>
-          </a>
-          <!-- End Card -->
+        <div class="col-md-6 mb-3">
+          <label>استان</label>
+          {{form.state}}
         </div>
-        <!-- End Col -->
+        <div class="col-md-6 mb-3">
+          <label>شهر</label>
+          {{form.city}}
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>کد پستی</label>
+          {{form.zip_code}}
+        </div>
+        <div class="col-md-12 mb-3">
+          <label>آدرس</label>
+          {{form.address}}
+        </div>
       </div>
-      <!-- End Row -->
-
-
-    </div>
-    <!-- End Body -->
+      <div class="card-footer">
+          <div class=" d-flex pt-5 justify-content-end">
+            <a class="btn btn-secondary ms-3" href="{% url "dashboard:customer:address-list" %}">بازگشت</a>
+            <button type="submit" class="btn btn-primary ms-3">افزودن آدرس</button>
+          </div>
+      </div>
+    </form>
+  </div>
 </div>
-<!-- End Card -->
+
+<!-- End Body -->
 {% endblock content %}

@@ -25,29 +25,36 @@
     <!-- Body -->
     <div class="card-body">
       <div class="row">
+        {% for object in object_list  %}
         <div class="col-sm-12 mb-5 mb-sm-7">
           <!-- Radio Check -->
           <div class=" w-100 h-100">
             <label class="" for="billingRadio1">
-              <span class="h5 d-block">آدرس قبض #1</span>
+              <span class="h5 d-block">#{{forloop.counter}} {{ object.title }}</span>
 
-              <span class="d-block mb-2"> 45 تراس روکر چرخ لاترون KW5 8NW، لندن UK </span>
-              <a class="btn btn-white btn-xs" href="#">
-                <i class="bi-pencil-fill me-1"></i> آدرس را ویرایش
-                کنید
+              <span class="d-block mb-2">{{ object.city }}, {{ object.state }}, {{ object.address }}</span>
+              <span class="d-block mb-2">کد پستی: {{ object.zip_code }}</span>
+              <a class="btn btn-white btn-xs" href="{% url "dashboard:customer:address-edit" pk=object.pk %}">
+                <i class="bi-pencil-fill me-1"></i>
+                ویرایش آدرس           
+              </a>
+              <a class="btn btn-danger btn-xs" href="{% url "dashboard:customer:address-delete" pk=object.pk %}">
+                <i class="bi-trash me-1"></i>
+                حذف آدرس           
               </a>
             </label>
+            <!-- End Col -->
           </div>
           <!-- End Radio Check -->
-        </div>
-        <!-- End Col -->
+          </div>
+          
+          {% endfor %}
 
 
 
         <div class="col-sm-12 mb-5 mb-sm-7">
           <!-- Card -->
-          <a class="card card-dashed card-centered" href="javascript:;" data-bs-toggle="modal"
-            data-bs-target="#accountAddAddressModal">
+          <a class="card card-dashed card-centered" href="{% url "dashboard:customer:address-create" %}">
             <div class="card-body card-dashed-body py-8">
               <img class="avatar avatar-lg avatar-4x3 mb-2" src="{% static 'svg/illustrations/oc-address.svg' %}"
                 alt="Image Description" />
