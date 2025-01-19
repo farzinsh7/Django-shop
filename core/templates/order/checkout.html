@@ -6,29 +6,26 @@
 <div class="container content-space-1 content-space-lg-2">
     <div class="row">
       <div class="col-lg-8 mb-7 mb-lg-0">
-        <h4 class="mb-3">انتخاب آدرس </h4>
-
+        <h4 class="mb-3">انتخاب آدرس</h4>
         <!-- Form -->
-        <form class="needs-validation" novalidate>
-
-
+        <form action="." method="post" id="checkout-form">
+          {% csrf_token %}
           <hr class="my-4">
 
           <div class="d-grid gap-2">
 
             <!-- Check -->
-            <div class="form-check">
-              <input type="radio" class="form-check-input" name="address" id="address-1" checked
-              required >
-              <label class="form-check-label" for="address"> کرج، xxxx ، بلوار xxx ، خیابان xxx ، بلوک xxx</label>
-            </div>
-            <div class="form-check">
-              <input type="radio" class="form-check-input" name="address" id="address-2" required>
-              <label class="form-check-label" for="address-2"> کرج، xxxx ، بلوار xxx ، خیابان xxx ، بلوک xxx</label>
-            </div>
+             {% for address in addresses %}
+              <div class="form-check">
+                <h4 class="form-check-label mt-2">{{address.title}}</h4>
+                <input type="radio" class="form-check-input" name="address">
+                <label class="form-check-label" for="address" value="{{address.id}}">{{address.state}}, {{address.city}}, {{address.address}}</label>
+                <p class="form-check-label mt-2">کد پستی: {{ address.zip_code }}</p>
+              </div>
+             {% endfor %}
             <!-- End Check -->
             <div>
-              <a class="" href="./account-address.html">مدیریت آدرس ها</a>
+              <a class="" href="{% url "dashboard:customer:address-list" %}">مدیریت آدرس ها</a>
             </div>
           </div>
 
@@ -62,7 +59,7 @@
 
             <div class="col-sm text-center text-sm-start">
               <a class="link" href="{% url "cart:cart-summary" %}">
-                <i class="bi-chevron-left small ms-1"></i> بازگشت به سبد خرید
+                بازگشت به سبد خرید <i class="bi-chevron-left small ms-1"></i> 
               </a>
             </div>
             <!-- End Col -->
@@ -82,10 +79,8 @@
                 <h3 class="card-header-title">خلاصه سفارش</h3>
               </div>
 
-              <form>
-
                 <div class="input-group border-bottom pb-4 mb-3 ">
-                  <input type="text" class="form-control text-center" name="name" placeholder="کد تخفیف"
+                  <input type="text" class="form-control text-center" form="checkout-form" name="coupon" placeholder="کد تخفیف"
                   aria-label="کد تخفیف">
                   <button class="btn btn-primary"> بررسی</button>
                 </div>
@@ -120,9 +115,8 @@
                 </div>
 
                 <div class="d-grid">
-                  <a class="btn btn-primary btn-lg" href="order-completed.html">ثبت نهایی</a>
+                  <button type="submit" form="checkout-form" class="btn btn-primary btn-lg">ثبت نهایی</button>
                 </div>
-              </form>
             </div>
             <!-- End Card -->
           </div>
