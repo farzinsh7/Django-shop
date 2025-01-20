@@ -19,7 +19,7 @@
              {% for address in addresses %}
               <div class="form-check">
                 <h4 class="form-check-label mt-2">{{address.title}}</h4>
-                <input type="radio" class="form-check-input" name="address_id" value="{{address.id}}">
+                <input type="radio" class="form-check-input" name="address_id" value="{{address.id}}" required>
                 <label class="form-check-label" for="address">{{address.state}}, {{address.city}}, {{address.address}}</label>
                 <p class="form-check-label mt-2">کد پستی: {{ address.zip_code }}</p>
               </div>
