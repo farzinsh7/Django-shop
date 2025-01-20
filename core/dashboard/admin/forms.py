@@ -3,6 +3,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Profile
 from shop.models import Product
+from order.models import Coupon
 
 
 class AdminPasswordChangeForm(PasswordChangeForm):
@@ -74,3 +75,26 @@ class ProductForm(forms.ModelForm):
         self.fields['price'].widget.attrs['class'] = "form-control"
         self.fields['discount_percent'].widget.attrs['class'] = "form-control"
         self.fields['discount_percent'].widget.attrs['type'] = "number"
+
+
+class AdminCouponForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = [
+            "code",
+            "description",
+            "discount_percent",
+            "max_limit_usage",
+            "used_by",
+            "expiration_date",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['code'].widget.attrs['class'] = "form-control"
+        self.fields['description'].widget.attrs['class'] = "form-control"
+        self.fields['discount_percent'].widget.attrs['class'] = "form-control"
+        self.fields['max_limit_usage'].widget.attrs['class'] = "form-control"
+        self.fields['used_by'].widget.attrs['class'] = "form-control"
+        self.fields['expiration_date'].widget.attrs['class'] = "form-control"
+        # self.fields['expiration_date'].widget.attrs['id'] = "id_expiration_date"

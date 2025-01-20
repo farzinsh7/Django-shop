@@ -17,4 +17,12 @@ urlpatterns = [
          views.AdminProductCreateView.as_view(), name="product-create"),
     path("product/<int:pk>/delete/",
          views.AdminProductDeleteView.as_view(), name="product-delete"),
+
+    path("coupon/create/",
+         views.AdminCouponCreateView.as_view(), name="coupon-create"),
+    path("coupon/list/", views.AdminCouponListView.as_view(), name="coupon-list"),
+    path("coupon/<int:pk>/edit/",
+         views.AdminCouponEditView.as_view(), name="coupon-edit"),
+    path("coupon/<int:pk>/delete/",
+         views.AdminCouponDeleteView.as_view(), name="coupon-delete"),
 ]
