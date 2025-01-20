@@ -21,38 +21,55 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        address = form.cleaned_data["address_id"]
-        coupon = form.cleaned_data["coupon"]
-        cart = Cart.objects.get(user=self.request.user)
-        cart_items = cart.cart_items.all()
-        order = Order.objects.create(
+        user = self.request.user
+        cleaned_data = form.cleaned_data
+        address = cleaned_data['address_id']
+        coupon = cleaned_data['coupon']
+
+        cart = Cart.objects.get(user=user)
+        order = self.create_order(address)
+
+        self.create_order_items(order, cart)
+        self.clear_cart(cart)
+
+        total_price = order.calculate_total_price()
+        self.apply_coupon(coupon, order, user, total_price)
+        order.save()
+        return super().form_valid(form)
+
+    def create_order(self, address):
+        return Order.objects.create(
             user=self.request.user,
-            title=address.title,
             address=address.address,
             state=address.state,
             city=address.city,
             zip_code=address.zip_code,
         )
-        for item in cart_items:
+
+    def create_order_items(self, order, cart):
+        for item in cart.cart_items.all():
             OrderItem.objects.create(
                 order=order,
                 product=item.product,
                 quantity=item.quantity,
                 price=item.product.get_price(),
             )
-        cart_items.delete()
+
+    def clear_cart(self, cart):
+        cart.cart_items.all().delete()
         CartSession(self.request.session).clear()
-        total_price = order.calculate_total_price()
+
+    def apply_coupon(self, coupon, order, user, total_price):
         if coupon:
-            total_price = total_price - \
-                round((total_price * Decimal(coupon.discount_percent / 100)))
+            discount_amount = round(
+                (total_price * Decimal(coupon.discount_percent / 100)))
+            total_price -= discount_amount
+
             order.coupon = coupon
-            coupon.used_by.add(self.request.user)
+            coupon.used_by.add(user)
             coupon.save()
 
         order.total_price = total_price
-        order.save()
-        return super().form_valid(form)
 
     def form_invalid(self, form):
         print(self.request.POST)
