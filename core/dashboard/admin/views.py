@@ -11,6 +11,7 @@ from django.contrib import messages
 from shop.models import Product, ProductCategory
 from order.models import Coupon
 from django.core import exceptions
+from django.utils import timezone
 
 
 class AdminDashboardHomeView(LoginRequiredMixin, HasAdminAccessPermission, TemplateView):
@@ -131,6 +132,11 @@ class AdminCouponListView(LoginRequiredMixin, HasAdminAccessPermission, ListView
             except exceptions.FieldError:
                 pass
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
 
 
 class AdminCouponCreateView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, CreateView):

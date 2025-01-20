@@ -68,7 +68,13 @@
                 {% for object in object_list  %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td class="align-content-center"><span class="badge rounded-pill bg-success">{{ object.code }}</span></td>
+                    <td class="align-content-center">
+                    {% if object.expiration_date and object.expiration_date < now %}
+                      <span class="badge rounded-pill bg-danger">{{ object.code }}</span>
+                    {% else %}
+                      <span class="badge rounded-pill bg-success">{{ object.code }}</span>
+                    {% endif %}
+                   </td>
                     <td class="align-content-center">{{ object.discount_percent }} %</td>
                     <td class="align-content-center">{{ object.used_by.count }}</td>
                     <td class="align-content-center">{{ object.max_limit_usage }}</td>
