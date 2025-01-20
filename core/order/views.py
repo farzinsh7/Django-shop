@@ -31,7 +31,6 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
 
         self.create_order_items(order, cart)
         self.clear_cart(cart)
-
         total_price = order.calculate_total_price()
         self.apply_coupon(coupon, order, user, total_price)
         order.save()
@@ -69,6 +68,11 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
             coupon.used_by.add(user)
             coupon.save()
 
+        total_tax = calculate_tax(total_price)
+        total_price = total_price + total_tax
+        shipping_cost = calculate_shipping(total_price)
+        total_price += shipping_cost
+
         order.total_price = total_price
 
     def form_invalid(self, form):
@@ -89,11 +93,12 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
 
         total_price = cart.calculate_total_price()
         total_tax = calculate_tax(total_price)
+        total_price += total_tax
         shipping_cost = calculate_shipping(total_price)
 
         context['shipping_cost'] = shipping_cost
         context['total_tax'] = total_tax
-        context['total_price'] = total_price + total_tax + shipping_cost
+        context['total_price'] = total_price + shipping_cost
         return context
 
 
