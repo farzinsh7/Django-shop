@@ -32,7 +32,7 @@ class Coupon(models.Model):
         default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     max_limit_usage = models.PositiveIntegerField(default=10)
     used_by = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="coupon_users")
+        settings.AUTH_USER_MODEL, related_name="coupon_users", blank=True)
     expiration_date = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)

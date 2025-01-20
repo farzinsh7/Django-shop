@@ -7,6 +7,7 @@ from cart.models import Cart
 from cart.cart import CartSession
 from .utils import calculate_tax, calculate_shipping
 from django.urls import reverse_lazy
+from decimal import Decimal
 
 
 class OrderCheckOutView(LoginRequiredMixin, FormView):
@@ -21,6 +22,7 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         address = form.cleaned_data["address_id"]
+        coupon = form.cleaned_data["coupon"]
         cart = Cart.objects.get(user=self.request.user)
         cart_items = cart.cart_items.all()
         order = Order.objects.create(
@@ -39,8 +41,17 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
                 price=item.product.get_price(),
             )
         cart_items.delete()
-        order.total_price = order.calculate_total_price(),
         CartSession(self.request.session).clear()
+        total_price = order.calculate_total_price()
+        if coupon:
+            total_price = total_price - \
+                round((total_price * Decimal(coupon.discount_percent / 100)))
+            order.coupon = coupon
+            coupon.used_by.add(self.request.user)
+            coupon.save()
+
+        order.total_price = total_price
+        order.save()
         return super().form_valid(form)
 
     def form_invalid(self, form):
