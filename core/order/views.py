@@ -114,22 +114,39 @@ class OrderValidateCouponView(LoginRequiredMixin, View):
         code = request.POST.get("code")
         user = self.request.user
 
-        is_valid = True
+        status_code = 200
         message = "کد تخفیف با موفقیت ثبت شد."
 
         try:
             coupon = Coupon.objects.get(code=code)
         except Coupon.DoesNotExist:
-            return JsonResponse({"is_valid": False, "message": "کد تخفیف معتبر نمی باشد."})
+            return JsonResponse({"message": "کد تخفیف معتبر نمی باشد."}, status=404)
 
         else:
             if coupon.used_by.count() >= coupon.max_limit_usage:
-                is_valid, message = False, "خطای محدودیت در تعداد استفاده"
+                status_code, message = 403, "خطای محدودیت در تعداد استفاده"
 
-            if coupon.expiration_date and coupon.expiration_date < timezone.now():
-                is_valid, message = False, "کد تخفیف منقضی شده است"
+            elif coupon.expiration_date and coupon.expiration_date < timezone.now():
+                status_code, message = 403, "کد تخفیف منقضی شده است"
 
-            if user in coupon.used_by.all():
-                is_valid, message = False, "این کد تخفیف قبلا توسط شما استفاده شده است."
+            elif user in coupon.used_by.all():
+                status_code, message = 403, "این کد تخفیف قبلا توسط شما استفاده شده است."
 
-        return JsonResponse({"is_valid": is_valid, "message": message})
+            else:
+                cart = Cart.objects.get(user=self.request.user)
+                total_price = cart.calculate_total_price()
+                total_price = total_price - \
+                    round(total_price * (coupon.discount_percent / 100))
+                total_tax = calculate_tax(total_price)
+                total_price += total_tax
+                shipping_cost = calculate_shipping(total_price)
+                total_price += shipping_cost
+                if shipping_cost == 0:
+                    shipping_cost = "رایگان"
+
+        return JsonResponse({
+            "message": message,
+            "shipping_cost": shipping_cost,
+            "total_tax": total_tax,
+            "total_price": total_price
+        }, status=status_code)

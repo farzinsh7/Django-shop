@@ -94,9 +94,9 @@
                     <dl class="row">
                       <dt class="col-sm-6">هزینه ارسال</dt>
                       {% if shipping_cost %}
-                      <dd class="col-sm-12 text-sm-end mb-0">{{shipping_cost|intcomma}} تومان</dd>
+                      <dd class="col-sm-12 text-sm-end mb-0" id="shipping-cost">{{shipping_cost|intcomma}} تومان</dd>
                       {% else %}
-                      <dd class="col-sm-12 text-sm-end mb-0">رایگان</dd>
+                      <dd class="col-sm-12 text-sm-end mb-0" id="shipping-cost">رایگان</dd>
                       {% endif %}
                     </dl>
                     <!-- End Row -->
@@ -106,14 +106,14 @@
                 <div class="d-grid gap-3 mb-4">
                   <dl class="row">
                     <dt class="col-sm-6">مالیات</dt>
-                    <dd class="col-sm-12 text-sm-end mb-0">{{ total_tax|intcomma }} تومان</dd>
+                    <dd class="col-sm-12 text-sm-end mb-0" id="total-tax">{{ total_tax|intcomma }} تومان</dd>
 
                   </dl>
                   <!-- End Row -->
 
                   <dl class="row">
                     <dt class="col-sm-6">جمع کل</dt>
-                    <dd class="col-sm-6 text-sm-end mb-0">{{ total_price|intcomma }} تومان</dd>
+                    <dd class="col-sm-6 text-sm-end mb-0" id="total-price">{{ total_price|intcomma }} تومان</dd>
                   </dl>
                   <!-- End Row -->
                 </div>
@@ -156,6 +156,16 @@
 {% endblock content %}
 {% block extra_js %}
 <script>
+  function applyDiscount(total_price, total_tax, shipping_cost){
+    $('#total-tax').html(total_tax)
+    $('#shipping-cost').html(shipping_cost)
+    $('#total-price').html(total_price)
+
+    formatPriceInToman(document.getElementById("total-tax"))
+    formatPriceInToman(document.getElementById("shipping-cost"))
+    formatPriceInToman(document.getElementById("total-price"))
+  }
+
   function validateCoupon(){
     $.ajax({
       url: '{% url "order:validate-coupon" %}',
@@ -173,9 +183,20 @@
             background: "blue",
           }
         }).showToast();
+        applyDiscount(response.total_price, response.total_tax, response.shipping_cost)
       },
       error: function (jqXHR, textStatus, errorThrown) {
-        console.log(response)
+        console.log(errorThrown)
+        const errorMessage = jqXHR.responseJSON && jqXHR.responseJSON.message
+        ? jqXHR.responseJSON.message
+        : "خطای ناشناخته‌ای رخ داده است.";
+        Toastify({
+          text:errorMessage,
+          className: `error`,
+          style: {
+            background: "red",
+          }
+        }).showToast();
       }
     });
   }
