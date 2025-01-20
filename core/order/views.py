@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import UserAddress, Order
+from .models import UserAddress, Order, OrderItem
 from .forms import CheckOutForm
 from cart.models import Cart
+from cart.cart import CartSession
 from .utils import calculate_tax, calculate_shipping
-from django.http import JsonResponse
 from django.urls import reverse_lazy
 
 
@@ -21,8 +21,26 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         address = form.cleaned_data["address_id"]
-        print(address)
-
+        cart = Cart.objects.get(user=self.request.user)
+        cart_items = cart.cart_items.all()
+        order = Order.objects.create(
+            user=self.request.user,
+            title=address.title,
+            address=address.address,
+            state=address.state,
+            city=address.city,
+            zip_code=address.zip_code,
+        )
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.get_price(),
+            )
+        cart_items.delete()
+        order.total_price = order.calculate_total_price(),
+        CartSession(self.request.session).clear()
         return super().form_valid(form)
 
     def form_invalid(self, form):
