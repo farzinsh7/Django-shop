@@ -82,8 +82,8 @@
 
                 <div class="input-group border-bottom pb-4 mb-3 ">
                   <input type="text" class="form-control text-center" name="coupon" placeholder="کد تخفیف"
-                  aria-label="کد تخفیف" form="checkout-form">
-                  <button class="btn btn-primary"> بررسی</button>
+                  aria-label="کد تخفیف" form="checkout-form" id="coupon-input">
+                  <button class="btn btn-primary" type="button" onclick="validateCoupon()"> بررسی</button>
                 </div>
 
                 <div class="border-bottom pb-4 mb-4">
@@ -154,3 +154,30 @@
 </div>
 <!-- End Content -->
 {% endblock content %}
+{% block extra_js %}
+<script>
+  function validateCoupon(){
+    $.ajax({
+      url: '{% url "order:validate-coupon" %}',
+      method: 'POST',
+      data: {
+          code: $('#coupon-input').val(),
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function (response) {
+        console.log("success", response)
+        Toastify({
+          text: response.message,
+          className: "info",
+          style: {
+            background: "blue",
+          }
+        }).showToast();
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(response)
+      }
+    });
+  }
+</script>
+{% endblock extra_js %}

@@ -118,7 +118,7 @@
 </script>
 <script>
   function addToCart(product_id) {
-      console.log(product_id);
+      // console.log(product_id);
       $.ajax({
           url: '{% url "cart:session-add-product" %}',
           method: 'POST',
