@@ -50,11 +50,16 @@ class Order(models.Model):
         Coupon, on_delete=models.PROTECT, null=True, blank=True)
     total_price = models.DecimalField(
         default=0, max_digits=15, decimal_places=0)
+
+    # order address information
     title = models.CharField(max_length=255, default="آدرس پستی")
     address = models.CharField(max_length=255)
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=50)
+
+    payment = models.ForeignKey(
+        'payment.Payment', on_delete=models.PROTECT, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'shop',
     'cart',
     'order',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -182,7 +183,14 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 PASSWORD_RESET_TIMEOUT = 172800
 
+# Shop Settings
+TAX_RATE = config('TAX_RATE', default=9)
+FREE_SHIPPING_THRESHOLD = config(
+    'FREE_SHIPPING_THRESHOLD', default=1000000)  # 1,000,000 Toman
+SHIPPING_FEE = config('SHIPPING_FEE', default=50000)  # 50,000 Toman
 
-TAX_RATE = 9
-FREE_SHIPPING_THRESHOLD = 1000000  # 1,000,000 Toman
-SHIPPING_FEE = 50000  # 50,000 Toman
+
+# Payment Getway Setting
+MERCHANT_ID = config(
+    'MERCHANT_ID', default='4ced0a1e-4ad8-4309-9668-3ea3ae8e8897')
+SANDBOX_MODE = config("SANDBOX_MODE", cast=bool, default=True)

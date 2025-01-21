@@ -9,7 +9,7 @@ class ZarinPalSandBox:
     _payment_page_url = "https://sandbox.zarinpal.com/pg/StartPay/"
     _callback_url = "http://redreseller.com/verify"
 
-    def __init__(self, merchant_id):
+    def __init__(self, merchant_id=settings.MERCHANT_ID):
         self.merchant_id = merchant_id
 
     def payment_request(self, amount, description="پرداخت کاربر سندباکس"):
