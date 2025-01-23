@@ -11,6 +11,7 @@ from django.shortcuts import redirect
 from decimal import Decimal
 from django.http import JsonResponse
 from django.utils import timezone
+from payment.models import Payment
 from payment.zarinpal_client import ZarinPalSandBox
 from django.contrib import messages
 
@@ -47,6 +48,12 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
         data = response.get("data", {})
         authority = data.get("authority")
         if authority:
+            payment_obj = Payment.objects.create(
+                authority_id=authority,
+                amount=round(order.total_price),
+            )
+            order.payment = payment_obj
+            order.save()
             return zarinpal.generate_payment_url(authority)
         else:
             error_message = response.get("errors", {}).get(
