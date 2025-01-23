@@ -39,13 +39,15 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
         total_price = order.calculate_total_price()
         self.apply_coupon(coupon, order, user, total_price)
         order.save()
+        return redirect(self.create_payment_url(order))
+
+    def create_payment_url(self, order):
         zarinpal = ZarinPalSandBox()
         response = zarinpal.payment_request(round(order.total_price))
         data = response.get("data", {})
         authority = data.get("authority")
         if authority:
-            payment_url = zarinpal.generate_payment_url(authority)
-            return redirect(payment_url)
+            return zarinpal.generate_payment_url(authority)
         else:
             error_message = response.get("errors", {}).get(
                 "message", "خطای ناشناخته")
