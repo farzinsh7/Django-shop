@@ -25,14 +25,15 @@ class PaymentVerifyView(View):
             payment_obj.status = PaymentStatus.success.value
             payment_obj.response_json = response
             payment_obj.save()
-            order.status == OrderStatus.processing.value
+            order.status = OrderStatus.processing.value
             order.save()
             return redirect(reverse_lazy("order:completed"))
+
         else:
             payment_obj.response_code = response['errors']["code"]
             payment_obj.status = PaymentStatus.failed.value
             payment_obj.response_json = response
             payment_obj.save()
-            order.status == OrderStatus.cancelled.value
+            order.status = OrderStatus.cancelled.value
             order.save()
             return redirect(reverse_lazy("order:failed"))
