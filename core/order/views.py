@@ -133,6 +133,10 @@ class OrderCompletedView(LoginRequiredMixin, TemplateView):
     template_name = "order/completed.html"
 
 
+class OrderFailedView(LoginRequiredMixin, TemplateView):
+    template_name = "order/failed.html"
+
+
 class OrderValidateCouponView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):

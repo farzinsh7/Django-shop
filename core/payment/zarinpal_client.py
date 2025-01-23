@@ -7,7 +7,7 @@ class ZarinPalSandBox:
     _payment_request_url = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
     _payment_verify_url = "https://sandbox.zarinpal.com/pg/v4/payment/verify.json"
     _payment_page_url = "https://sandbox.zarinpal.com/pg/StartPay/"
-    _callback_url = "http://redreseller.com/verify"
+    _callback_url = "http://127.0.0.1:8000/payment/verify"
 
     def __init__(self, merchant_id=settings.MERCHANT_ID, currency=settings.CURRENCY):
         self.merchant_id = merchant_id

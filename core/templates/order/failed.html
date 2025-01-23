@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}فروشگاه | خطای سفارش {% endblock title%}
+{% block content %}
+<!-- Content -->
+<div class="container content-space-2 content-space-lg-3">
+    <div class="w-md-75 w-lg-50 text-center mx-md-auto">
+        <div class="mb-5">
+        <img class="img-fluid" src="{% static 'svg/illustrations/oc-error.svg' %}" alt="Image Description" style="width: 15rem;">
+        </div>
+
+        <div class="mb-5">
+        <h1 class="h2">سفارش شما با خطا مواجه شد!</h1>
+        <p>لطفا مجددا تلاش کنید</p>
+        </div>
+
+        <a class="btn btn-primary btn-transition rounded-pill px-6" href="{% url "shop:product-grid" %}">بازگشت به فروشگاه</a>
+    </div>
+    </div>
+    <!-- End Content -->
+</div>
+<!-- End Clients -->
+{% endblock content %}
