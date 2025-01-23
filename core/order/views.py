@@ -7,9 +7,12 @@ from cart.models import Cart
 from cart.cart import CartSession
 from .utils import calculate_tax, calculate_shipping
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 from decimal import Decimal
 from django.http import JsonResponse
 from django.utils import timezone
+from payment.zarinpal_client import ZarinPalSandBox
+from django.contrib import messages
 
 
 class OrderCheckOutView(LoginRequiredMixin, FormView):
@@ -36,7 +39,20 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
         total_price = order.calculate_total_price()
         self.apply_coupon(coupon, order, user, total_price)
         order.save()
-        return super().form_valid(form)
+        zarinpal = ZarinPalSandBox()
+        response = zarinpal.payment_request(round(order.total_price))
+        data = response.get("data", {})
+        authority = data.get("authority")
+        if authority:
+            payment_url = zarinpal.generate_payment_url(authority)
+            return redirect(payment_url)
+        else:
+            error_message = response.get("errors", {}).get(
+                "message", "خطای ناشناخته")
+            print(f"خطای درگاه زرین پال: {error_message}")
+            messages.error(
+                self.request, "پرداخت با خطا مواجه شد. لطفا مجدد تلاش کنید.")
+            return redirect("order:checkout")
 
     def create_order(self, address):
         return Order.objects.create(
