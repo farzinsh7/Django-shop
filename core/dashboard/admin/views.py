@@ -12,6 +12,7 @@ from shop.models import Product, ProductCategory
 from order.models import Coupon
 from django.core import exceptions
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class AdminDashboardHomeView(LoginRequiredMixin, HasAdminAccessPermission, TemplateView):
@@ -114,7 +115,6 @@ class AdminProductDeleteView(LoginRequiredMixin, HasAdminAccessPermission, Succe
     template_name = "dashboard/admin/products/product-delete.html"
     success_message = "محصول شما با موفقیت حذف گردید."
     success_url = reverse_lazy("dashboard:admin:product-list")
-
 # End Product CRUD
 
 
