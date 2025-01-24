@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     # Third-party Apps
+    'tinymce',
 
     # Custom Apps
     'accounts',
@@ -190,8 +191,62 @@ FREE_SHIPPING_THRESHOLD = config(
 SHIPPING_FEE = config('SHIPPING_FEE', default=50000)  # 50,000 Toman
 
 
-# Payment Getway Setting
+# Payment Getway Settings
 MERCHANT_ID = config(
     'MERCHANT_ID', default='4ced0a1e-4ad8-4309-9668-3ea3ae8e8897')
 SANDBOX_MODE = config("SANDBOX_MODE", cast=bool, default=True)
 CURRENCY = config("CURRENCY", default='IRT')
+
+
+# TinyMCE settings
+TINYMCE_DEFAULT_CONFIG = {
+    "entity_encoding": "raw",
+    "theme": "silver",
+    "setup": "function(editor){editor.on('change', function(){editor.save();});}",
+    "menubar": "file edit view insert format tools table",
+    "plugins": 'print preview paste importcss searchreplace autolink autosave save code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap emoticons quickbars',
+    "toolbar": "fullscreen preview | undo redo | bold italic forecolor backcolor | formatselect | image link | "
+               "alignleft aligncenter alignright alignjustify | blocks | fonts | outdent indent |  numlist bullist checklist | fontsizeselect ",
+    "custom_undo_redo_levels": 50,
+    "image_dimensions": False,
+    "quickbars_insert_toolbar": False,
+    "setup": """function (editor) {
+        editor.on('SetContent', function (e) {
+            var imgs = editor.getDoc().getElementsByTagName('img');
+            for (var i = 0; i < imgs.length; i++) {
+                imgs[i].style.width = '90%';
+            }
+        });
+    }""",
+    "file_picker_callback": """function (cb, value, meta) {
+        var input = document.createElement("input");
+        input.setAttribute("type", "file");
+        if (meta.filetype == "image") {
+            input.setAttribute("accept", "image/*");
+        }
+        if (meta.filetype == "media") {
+            input.setAttribute("accept", "video/*");
+        }
+
+        input.onchange = function () {
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function () {
+                var id = "blobid" + (new Date()).getTime();
+                var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                var base64 = reader.result.split(",")[1];
+                var blobInfo = blobCache.create(id, file, base64);
+                blobCache.add(blobInfo);
+
+                if (meta.filetype == "image") {
+                    cb(blobInfo.blobUri(), { title: file.name, width: '90%' });
+                } else {
+                    cb(blobInfo.blobUri(), { title: file.name });
+                }
+            };
+            reader.readAsDataURL(file);
+        };
+        input.click();
+    }""",
+    "content_style": "body { font-family:Roboto,Helvetica,Arial,sans-serif; font-size:14px }",
+}

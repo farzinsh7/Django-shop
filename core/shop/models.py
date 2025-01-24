@@ -3,6 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from decimal import Decimal
+from tinymce.models import HTMLField
 
 
 class StatusType(models.IntegerChoices):
@@ -14,7 +15,7 @@ class ProductCategory(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True)
     image = models.ImageField(upload_to="product/category/")
-    description = models.TextField()
+    description = HTMLField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
@@ -29,8 +30,8 @@ class Product(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True)
     image = models.ImageField(upload_to="product/img")
-    description = models.TextField()
-    short_description = models.TextField(null=True, blank=True)
+    description = HTMLField()
+    short_description = HTMLField(null=True, blank=True)
     stock = models.PositiveIntegerField(default=0)
     status = models.IntegerField(
         choices=StatusType.choices, default=StatusType.draft.value)

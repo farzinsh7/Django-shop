@@ -63,7 +63,7 @@
         <!-- Heading -->
         <div class="mb-5">
             <h1 class="h2">{{ object.title }}</h1>
-            <p>{{ object.short_description }}</p>
+            <p>{{ object.short_description|safe }}</p>
         </div>
         <!-- End Heading -->
 
@@ -209,7 +209,7 @@
     <!-- Content -->
     <div class="container content-space-t-2 content-space-md-3">
     <div class="row">
-        {{ object.description }}
+        {{ object.description|safe }}
     </div>
     <!-- End Row -->
     </div>
