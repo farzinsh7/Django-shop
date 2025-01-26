@@ -1,16 +1,12 @@
-from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, UpdateView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import UpdateView, ListView, CreateView, UpdateView, DeleteView
 from dashboard.permissions import HasCustomerAccessPermission
-from dashboard.customer.forms import CustomerPasswordChangeForm, CustomerProfileEditForm, UserAddressForm
-from accounts.models import Profile
-from django.contrib import messages
+from dashboard.customer.forms import UserAddressForm
 from django.shortcuts import redirect
 from order.models import UserAddress
 from django.core import exceptions
-from order.models import Order
 
 
 class CustomerAddressCreateView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, CreateView):

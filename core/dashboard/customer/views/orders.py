@@ -1,13 +1,9 @@
-from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, UpdateView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 from dashboard.permissions import HasCustomerAccessPermission
-from dashboard.customer.forms import CustomerPasswordChangeForm, CustomerProfileEditForm, UserAddressForm
-from accounts.models import Profile
-from django.contrib import messages
-from django.shortcuts import redirect
+from dashboard.customer.forms import UserAddressForm
 from order.models import UserAddress
 from django.core import exceptions
 from order.models import Order
@@ -32,3 +28,9 @@ class CustomerOrdersListView(LoginRequiredMixin, HasCustomerAccessPermission, Li
         context = super().get_context_data(**kwargs)
         context['total_orders'] = self.get_queryset().count()
         return context
+
+
+class CustomerOrderDetailView(LoginRequiredMixin, HasCustomerAccessPermission, DetailView):
+    model = Order
+    queryset = Order.objects.all()
+    template_name = "dashboard/customer/orders/order-detail.html"
