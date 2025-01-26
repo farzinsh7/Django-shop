@@ -9,17 +9,14 @@ from decimal import Decimal
 
 class CustomerOrdersListView(LoginRequiredMixin, HasCustomerAccessPermission, ListView):
     template_name = "dashboard/customer/orders/order-list.html"
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = Order.objects.prefetch_related(
             'order_items__product').filter(user=self.request.user).order_by('-created_at')
         if search_q := self.request.GET.get("q"):
-            queryset = queryset.filter(title__icontains=search_q)
-        if order_by := self.request.GET.get("order_by"):
-            try:
-                queryset = queryset.order_by(order_by)
-            except exceptions.FieldError:
-                pass
+            queryset = queryset.filter(id__icontains=search_q)
+
         return queryset
 
     def get_context_data(self, **kwargs):
