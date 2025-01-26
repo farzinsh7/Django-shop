@@ -4,51 +4,13 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, ListView, CreateView, UpdateView, DeleteView
 from dashboard.permissions import HasCustomerAccessPermission
-from .forms import CustomerPasswordChangeForm, CustomerProfileEditForm, UserAddressForm
+from dashboard.customer.forms import CustomerPasswordChangeForm, CustomerProfileEditForm, UserAddressForm
 from accounts.models import Profile
 from django.contrib import messages
 from django.shortcuts import redirect
 from order.models import UserAddress
 from django.core import exceptions
 from order.models import Order
-
-
-class CustomerDashboardHomeView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
-
-    template_name = "dashboard/customer/home.html"
-
-
-class CustomerSecurityEditView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, auth_views.PasswordChangeView):
-    template_name = "dashboard/customer/profile/security-edit.html"
-    form_class = CustomerPasswordChangeForm
-    success_url = reverse_lazy("dashboard:customer:security-edit")
-    success_message = "رمز عبور شما با موفقیت تغییر پیدا کرد."
-
-
-class CustomerProfileEditView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, UpdateView):
-    template_name = "dashboard/customer/profile/profile-edit.html"
-    form_class = CustomerProfileEditForm
-    success_url = reverse_lazy("dashboard:customer:profile-edit")
-    success_message = "بروزرسانی با موفقیت انجام شد."
-
-    def get_object(self, queryset=None):
-        return Profile.objects.get(user=self.request.user)
-
-
-class CustomerProfileImageEditView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, UpdateView):
-    http_method_names = ["post"]
-    model = Profile
-    fields = ["avatar"]
-    success_url = reverse_lazy("dashboard:customer:profile-edit")
-    success_message = "بروزرسانی تصویر پروفایل با موفقیت انجام شد."
-
-    def get_object(self, queryset=None):
-        return Profile.objects.get(user=self.request.user)
-
-    def form_invalid(self, form):
-        messages.error(
-            self.request, "ارسال تصویر با مشکل مواجه شد! لطفا مجدد تلاش کنید.")
-        return redirect(reverse_lazy(self.success_url))
 
 
 class CustomerAddressCreateView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, CreateView):
@@ -102,24 +64,3 @@ class CustomerAddressDeleteView(LoginRequiredMixin, HasCustomerAccessPermission,
 
     def get_queryset(self):
         return UserAddress.objects.filter(user=self.request.user)
-
-
-class CustomerOrdersListView(LoginRequiredMixin, HasCustomerAccessPermission, ListView):
-    template_name = "dashboard/customer/orders/order-list.html"
-
-    def get_queryset(self):
-        queryset = Order.objects.prefetch_related(
-            'order_items__product').filter(user=self.request.user)
-        if search_q := self.request.GET.get("q"):
-            queryset = queryset.filter(title__icontains=search_q)
-        if order_by := self.request.GET.get("order_by"):
-            try:
-                queryset = queryset.order_by(order_by)
-            except exceptions.FieldError:
-                pass
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['total_orders'] = self.get_queryset().count()
-        return context
