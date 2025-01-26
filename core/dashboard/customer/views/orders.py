@@ -31,6 +31,7 @@ class CustomerOrdersListView(LoginRequiredMixin, HasCustomerAccessPermission, Li
 
 
 class CustomerOrderDetailView(LoginRequiredMixin, HasCustomerAccessPermission, DetailView):
-    model = Order
-    queryset = Order.objects.all()
     template_name = "dashboard/customer/orders/order-detail.html"
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
