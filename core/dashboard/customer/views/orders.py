@@ -11,6 +11,9 @@ class CustomerOrdersListView(LoginRequiredMixin, HasCustomerAccessPermission, Li
     template_name = "dashboard/customer/orders/order-list.html"
     paginate_by = 10
 
+    def get_paginate_by(self, queryset):
+        return self.request.GET.get('page_size', self.paginate_by)
+
     def get_queryset(self):
         queryset = Order.objects.prefetch_related(
             'order_items__product').filter(user=self.request.user).order_by('-created_at')
