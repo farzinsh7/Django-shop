@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from order.models import UserAddress
 from django.core import exceptions
+from order.models import Order
 
 
 class CustomerDashboardHomeView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
@@ -101,3 +102,18 @@ class CustomerAddressDeleteView(LoginRequiredMixin, HasCustomerAccessPermission,
 
     def get_queryset(self):
         return UserAddress.objects.filter(user=self.request.user)
+
+
+class CustomerOrdersListView(LoginRequiredMixin, HasCustomerAccessPermission, ListView):
+    template_name = "dashboard/customer/orders/order-list.html"
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(user=self.request.user)
+        if search_q := self.request.GET.get("q"):
+            queryset = queryset.filter(title__icontains=search_q)
+        if order_by := self.request.GET.get("order_by"):
+            try:
+                queryset = queryset.order_by(order_by)
+            except exceptions.FieldError:
+                pass
+        return queryset

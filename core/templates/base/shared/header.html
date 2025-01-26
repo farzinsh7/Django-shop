@@ -71,7 +71,7 @@
                 {% if request.user.is_superuser %}<li><a class="dropdown-item" href="{% url "admin:index" %}">پنل ادمین</a></li>{% endif %}
                 <li><a class="dropdown-item" href="{% url "dashboard:home" %}">پروفایل</a></li>
                 <li><a class="dropdown-item" href="#">آدرس ها</a></li>
-                <li><a class="dropdown-item" href="#">سفارشات</a></li>
+                <li><a class="dropdown-item" href="{% url "dashboard:customer:orders-list" %}">سفارشات</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">خروج</a></li>
               </ul>

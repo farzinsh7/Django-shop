@@ -17,12 +17,12 @@ class UserAddress(models.Model):
 
 
 class OrderStatus(models.IntegerChoices):
-    pending = 1, _("pending")
-    processing = 2, _("processing")
-    shipped = 3, _("shipped")
-    deliverd = 4, _("deliverd")
-    cancelled = 5, _("cancelled")
-    refund = 6, _("refund")
+    pending = 1, _("در حال انتظار")
+    processing = 2, _("در حال پردازش")
+    shipped = 3, _("در حال ارسال")
+    deliverd = 4, _("ارسال شده")
+    cancelled = 5, _("لغو شده")
+    refund = 6, _("عودت داده شده")
 
 
 class Coupon(models.Model):
