@@ -141,9 +141,11 @@
                         <a class="btn btn-white btn-sm" href="{% url "dashboard:customer:order-detail" pk=object.pk %}">
                           <i class="bi-basket small me-2"></i> دیدن سفارش
                         </a>
-                        <a class="btn btn-white btn-sm" href="#">
+                        {% if object.status == 4 %}
+                        <a class="btn btn-white btn-sm" href="{% url "dashboard:customer:order-invoice" pk=object.pk %}" target="_blank">
                           <i class="bi-receipt small me-2"></i> مشاهده فاکتور
                         </a>
+                        {% endif %}
                         <a class="btn btn-primary btn-sm" href="#">پیگیری سفارش</a>
                       </div>
                     </div>
@@ -232,7 +234,7 @@
                             <a class="btn btn-white btn-sm" href="{% url "dashboard:customer:order-detail" pk=object.pk %}">
                               <i class="bi-basket small me-2"></i> دیدن سفارش
                             </a>
-                            <a class="btn btn-white btn-sm" href="#">
+                            <a class="btn btn-white btn-sm" href="{% url "dashboard:customer:order-invoice" pk=object.pk %}">
                               <i class="bi-receipt small me-2"></i> مشاهده فاکتور
                             </a>
                             <a class="btn btn-primary btn-sm" href="#">پیگیری سفارش</a>
@@ -298,9 +300,6 @@
                       <div class="d-grid gap-2">
                         <a class="btn btn-white btn-sm" href="{% url "dashboard:customer:order-detail" pk=object.pk %}">
                           <i class="bi-basket small me-2"></i> دیدن سفارش
-                        </a>
-                        <a class="btn btn-white btn-sm" href="#">
-                          <i class="bi-receipt small me-2"></i> مشاهده فاکتور
                         </a>
                         <a class="btn btn-primary btn-sm" href="#">پیگیری سفارش</a>
                       </div>
