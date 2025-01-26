@@ -85,8 +85,8 @@
               <table class="table table-borderless table-nowrap table-align-middle">
                 <thead class="thead-light">
                   <tr>
-                    <th>تصور کالا</th>
-                    <th>کالا</th>
+                    <th>تصویر محصول</th>
+                    <th>نام محصول</th>
                     <th>تعداد</th>
                     <th class="table-text-end">قیمت</th>
                   </tr>
@@ -140,15 +140,12 @@
               {% if coupon %}
               <div class="row mb-3">
                 <dt class="col-md-3">کد تخفیف :</dt>
-                <dl class="col-md-3">{{ coupon }} - {{ coupon.discount_percent }}%</dl>
+                <dl class="col-md-3"><strong>{{ coupon }}</strong> ({{ discount_percent }}%)</dl>
               </div>
               <!-- End Row -->
               {% endif %}
-
             </div>
             <!-- End Row -->
-
-
           </div>
         </div>
         <!-- End Card -->

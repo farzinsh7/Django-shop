@@ -48,6 +48,7 @@ class Order(models.Model):
         choices=OrderStatus.choices, default=OrderStatus.pending.value)
     coupon = models.ForeignKey(
         Coupon, on_delete=models.PROTECT, null=True, blank=True)
+    coupon_at_order = models.IntegerField(default=0)
     total_price = models.DecimalField(
         default=0, max_digits=15, decimal_places=0)
 

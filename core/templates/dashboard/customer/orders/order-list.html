@@ -127,7 +127,7 @@
                   <div class="row">
                     <div class="col-md-8">
                       <div class="row gx-2">
-                        {% for item in object.order_items.all %}
+                        {% for item in object.order_items.all|slice:":3" %}
                             <div class="col">
                                 <img class="avatar avatar-xl avatar-4x3" src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
                             </div>

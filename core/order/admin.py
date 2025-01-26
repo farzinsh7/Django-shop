@@ -11,6 +11,7 @@ class OrderAdmin(admin.ModelAdmin):
                     'total_price',
                     'created_at',
                     ]
+    readonly_fields = ('coupon_at_order',)
 
 
 @admin.register(models.OrderItem)

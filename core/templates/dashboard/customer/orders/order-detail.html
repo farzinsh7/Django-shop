@@ -42,6 +42,7 @@
                 <th scope="col">کد محصول</th>
                 <th scope="col">نام محصول</th>
                 <th scope="col">تعداد سفارش</th>
+                <th scope="col">قیمت</th>
               </tr>
             </thead>
             <tbody>
@@ -56,10 +57,16 @@
                 <td>{{ item.product.sku }}</td>
                 <td>{{ item.product.title }}</td>
                 <td>{{ item.quantity }}</td>
+                <td>{{ item.price|intcomma }} تومان</td>
               </tr>
-              {% endfor %}              
+              {% endfor %}          
             </tbody>
           </table>
+          <hr>
+          <div class="row mb-3 align-items-center">
+            <dt class="col-md-3">مجموع سفارش :</dt>
+            <dl class="col-md-3">{{ object.total_price|intcomma }} تومان</dl>
+          </div>
         </div>
         <!-- End Table -->
 

@@ -52,15 +52,16 @@ class CustomerOrderInvoiceView(LoginRequiredMixin, HasCustomerAccessPermission, 
 
         # Apply coupon discount if available
         discount_amount = 0
-        if order.coupon:
+        if order.coupon_at_order:
             discount_amount = round(
-                total_price * Decimal(order.coupon.discount_percent) / 100)
+                total_price * Decimal(order.coupon_at_order) / 100)
             total_price -= discount_amount
 
         total_tax = calculate_tax(total_price)
         shipping_cost = calculate_shipping(total_price)
 
         context['discount_amount'] = discount_amount
+        context['discount_percent'] = order.coupon_at_order
         context['coupon'] = coupon
         context['shipping_cost'] = shipping_cost
         context['total_tax'] = total_tax

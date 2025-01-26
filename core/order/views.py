@@ -33,7 +33,7 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
         coupon = cleaned_data['coupon']
 
         cart = Cart.objects.get(user=user)
-        order = self.create_order(address)
+        order = self.create_order(address, coupon)
 
         self.create_order_items(order, cart)
         self.clear_cart(cart)
@@ -63,14 +63,24 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
                 self.request, "پرداخت با خطا مواجه شد. لطفا مجدد تلاش کنید.")
             return redirect("order:checkout")
 
-    def create_order(self, address):
-        return Order.objects.create(
-            user=self.request.user,
-            address=address.address,
-            state=address.state,
-            city=address.city,
-            zip_code=address.zip_code,
-        )
+    def create_order(self, address, coupon):
+        if coupon:
+            return Order.objects.create(
+                user=self.request.user,
+                address=address.address,
+                state=address.state,
+                city=address.city,
+                zip_code=address.zip_code,
+                coupon_at_order=coupon.discount_percent,
+            )
+        else:
+            return Order.objects.create(
+                user=self.request.user,
+                address=address.address,
+                state=address.state,
+                city=address.city,
+                zip_code=address.zip_code,
+            )
 
     def create_order_items(self, order, cart):
         for item in cart.cart_items.all():
