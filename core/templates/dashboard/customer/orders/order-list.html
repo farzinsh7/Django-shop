@@ -75,15 +75,15 @@
           <!-- Select Group -->
           <div class="d-sm-flex align-items-sm-center mb-5">
             <div class="mb-2 mb-sm-0 me-3">
-              <span><strong class="text-dark">3 سفارش</strong> قرار داده شده در</span>
+              <span><strong class="text-dark">{{ total_orders }} سفارش</strong> قرار داده شده در</span>
             </div>
 
             <!-- Select -->
-            <div class="tom-select-custom">
+            <div class="tom-select-custom me-2">
               <select class="js-select form-select form-select-sm">
-                <option value="last 30 days">30 روز گذشته</option>
-                <option value="past 6 months" selected>6 ماه گذشته</option>
-                <option value="2019">2019</option>
+                <option value="last 7 days">7 روز گذشته</option>
+                <option value="past month" selected>ماه گذشته</option>
+                <option value="year">سال گذشته</option>
               </select>
             </div>
             <!-- End Select -->

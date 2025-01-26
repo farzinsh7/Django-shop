@@ -20,7 +20,7 @@ class OrderStatus(models.IntegerChoices):
     pending = 1, _("در حال انتظار")
     processing = 2, _("در حال پردازش")
     shipped = 3, _("در حال ارسال")
-    deliverd = 4, _("ارسال شده")
+    deliverd = 4, _("تحویل داده شده")
     cancelled = 5, _("لغو شده")
     refund = 6, _("عودت داده شده")
 
