@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, ListView, DeleteView
+from django.views.generic import UpdateView, ListView, DetailView
 from dashboard.admin.forms import OrderForm
 from dashboard.permissions import HasAdminAccessPermission
 from django.contrib.messages.views import SuccessMessageMixin
-from order.models import Order
+from order.models import Order, OrderStatus
 from django.core import exceptions
 from django.utils.translation import gettext_lazy as _
 from order.utils import calculate_tax, calculate_shipping
@@ -66,8 +66,35 @@ class AdminOrderEditView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMe
         return context
 
 
-class AdminOrderDeleteView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, DeleteView):
-    queryset = Order.objects.all()
-    template_name = "dashboard/admin/orders/order-delete.html"
-    success_message = "سفارش شما با موفقیت حذف گردید."
-    success_url = reverse_lazy("dashboard:admin:orders-list")
+class AdminOrderInvoiceView(LoginRequiredMixin, HasAdminAccessPermission, DetailView):
+    template_name = "dashboard/customer/orders/order-invoice.html"
+
+    def get_queryset(self):
+        return Order.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        order = self.object
+        coupon = order.coupon
+
+        total_price = sum(
+            item.price * item.quantity for item in order.order_items.all())
+
+        # Apply coupon discount if available
+        discount_amount = 0
+        if order.coupon_at_order:
+            discount_amount = round(
+                total_price * Decimal(order.coupon_at_order) / 100)
+            total_price -= discount_amount
+
+        total_tax = calculate_tax(total_price)
+        shipping_cost = calculate_shipping(total_price)
+
+        context['discount_amount'] = discount_amount
+        context['discount_percent'] = order.coupon_at_order
+        context['coupon'] = coupon
+        context['shipping_cost'] = shipping_cost
+        context['total_tax'] = total_tax
+
+        return context
