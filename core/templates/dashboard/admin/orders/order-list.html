@@ -1,0 +1,138 @@
+{% extends "dashboard/customer/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-light mb-0">
+    <li class="breadcrumb-item">حساب</li>
+    <li class="breadcrumb-item">داشبورد ادمین</li>
+    <li class="breadcrumb-item active" aria-current="page">
+         لیست سفارشات  
+    </li>
+  </ol>
+</nav>
+<!-- End Breadcrumb -->
+{% endblock header %}
+{% block content %}
+ <!-- Card -->
+ <div class="card">
+  <!-- Header -->
+  <div class="card-header border-bottom">
+    <h5 class="card-header-title">لیست سفارشات</h5>
+  </div>
+  <!-- End Header -->
+
+  <!-- Body -->
+  <div class="card-body">
+    <div class="container pb-5">
+      <form class="row">
+
+        <!-- Input Card -->
+        <div class="col-md-5 py-1">
+          <input type="text" class="form-control" placeholder="جستجو" aria-label="جستجو ">
+
+        </div>
+        <!-- End Input Card -->
+        <div class="col-md-3 py-1">
+          <select class="form-select">
+            <option value="Relevance" selected="">ارتباط</option>
+            <option value="mostRecent">اخیرا</option>
+          </select>
+        </div>
+        <div class="col-md-3 py-1">
+          <select class="form-select">
+            <option value="Relevance" selected="">دسته بندی ها</option>
+            <option value="mostRecent">انجام شده</option>
+          </select>
+        </div>
+        <div class="col-md-1 py-1">
+          <button type="button" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="row">
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">شماره سفارش</th>
+              <th scope="col">سفارش دهنده</th>
+              <th scope="col">قیمت کل</th>
+              <th scope="col">تاریخ ثبت</th>
+              <th scope="col">وضعیت</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for object in object_list %}
+            <tr>
+              <th scope="row">{{ forloop.counter0|add:page_obj.start_index }}</th>
+              <td><a href="./admin-account-order-single.html">{{object.id}}</a></td>
+              <td>{{ object.user.user_profile.get_fullname }}</td>
+              <td>{{ object.total_price|intcomma }} تومان</td>
+              <td>{{ object.created_at|date:"M d, Y h:i" }}</td>
+              {% if object.status == 2 %}
+              <td><span class="badge bg-warning">{{ object.get_status_display }}</span></td>
+              {% elif object.status == 3 %}
+              <td><span class="badge bg-primary">{{ object.get_status_display }}</span></td>
+              {% elif object.status == 4 %}
+              <td><span class="badge bg-success">{{ object.get_status_display }}</span></td>
+              {% elif object.status == 5 %}
+              <td><span class="badge bg-danger">{{ object.get_status_display }}</span></td>
+              {% elif object.status == 6 %}
+              <td><span class="badge bg-secondary">{{ object.get_status_display }}</span></td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!-- End Table -->
+      {% if page_obj.has_other_pages %}
+      <!-- Pagination -->
+      <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+              <button class="page-link" onclick="changePage({{ page_obj.previous_page_number }})" aria-label="Previous">
+              <span aria-hidden="true">
+                  <i class="bi-chevron-double-right small"></i>
+              </span>
+              </button>
+          </li>
+          {% endif %}
+          {% for page in page_obj.paginator %}
+          {% if page.number == page_obj.number %}
+          <li class="page-item active"><button class="page-link" onclick="changePage({{ page.number }})">{{ page.number }}</button></li>
+          {% elif page.number > page_obj.number|add:'-3' and page.number < page_obj.number|add:'3' %}
+          <li class="page-item"><button class="page-link" onclick="changePage({{ page.number }})">{{ page.number }}</button></li>
+          {% endif %}
+          {% endfor %}
+          
+          {% if page_obj.has_next %}
+              <li class="page-item">
+                  <button class="page-link " onclick="changePage({{ page_obj.next_page_number }})" aria-label="Next">
+                  <span aria-hidden="true">
+                      <i class="bi-chevron-double-left small"></i>
+                  </span>
+                  </button>
+              </li>
+          {% endif %}
+          </ul>
+      </nav>
+      <!-- End Pagination -->
+      {% endif %}
+
+    </div>
+    <!-- End Row -->
+
+  </div>
+  <!-- End Body -->
+</div>
+<!-- End Card -->
+{% endblock content %}

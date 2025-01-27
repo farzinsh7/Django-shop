@@ -68,10 +68,14 @@
                 </span>
               </button>
               <ul class="dropdown-menu" aria-labelledby="profile-dropdown">
-                {% if request.user.is_superuser %}<li><a class="dropdown-item" href="{% url "admin:index" %}">پنل ادمین</a></li>{% endif %}
                 <li><a class="dropdown-item" href="{% url "dashboard:home" %}">پروفایل</a></li>
-                <li><a class="dropdown-item" href="#">آدرس ها</a></li>
+                {% if request.user.is_superuser %}
+                <li><a class="dropdown-item" href="{% url "admin:index" %}">پنل ادمین</a></li>
+                <li><a class="dropdown-item" href="{% url "dashboard:admin:orders-list" %}">سفارشات</a></li>
+                {% else %}
+                <li><a class="dropdown-item" href="{% url "dashboard:customer:address-list" %}">آدرس ها</a></li>
                 <li><a class="dropdown-item" href="{% url "dashboard:customer:orders-list" %}">سفارشات</a></li>
+                {% endif %}
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">خروج</a></li>
               </ul>
