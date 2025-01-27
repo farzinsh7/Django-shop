@@ -30,24 +30,29 @@
 
         <!-- Input Card -->
         <div class="col-md-5 py-1">
-          <input type="text" class="form-control" placeholder="جستجو" aria-label="جستجو ">
+          <input type="text" name="q" class="form-control" id="search-query-filter" placeholder="جستجو" aria-label="جستجو">
 
         </div>
         <!-- End Input Card -->
         <div class="col-md-3 py-1">
-          <select class="form-select">
-            <option value="Relevance" selected="">ارتباط</option>
-            <option value="mostRecent">اخیرا</option>
-          </select>
+          <select class="form-select" id="status-type-filter" name="status">
+            <option value="" selected>وضعیت</option>
+            {% for status_type in statuses %}
+            <option value="{{status_type.0}}">{{status_type.1}}</option>
+            {% endfor %}
+        </select>
         </div>
         <div class="col-md-3 py-1">
-          <select class="form-select">
-            <option value="Relevance" selected="">دسته بندی ها</option>
-            <option value="mostRecent">انجام شده</option>
-          </select>
+          <select class="form-select" id="order-by-filter">
+            <option value="" selected>مرتب سازی</option>
+            <option value="-created_at">جدیدترین</option>
+            <option value="created_at">قدیمی ترین</option>
+            <option value="-total_price">بیشترین قیمت</option>
+            <option value="total_price">کمترین قیمت</option>
+        </select>
         </div>
         <div class="col-md-1 py-1">
-          <button type="button" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
+          <button type="submit" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
         </div>
       </form>
 
@@ -138,3 +143,21 @@
 </div>
 <!-- End Card -->
 {% endblock content %}
+{% block extra_js %}
+<script>
+    $(document).ready(function(){
+        let current_url_params = new URLSearchParams(window.location.search)
+        $("#search-query-filter").val(current_url_params.get("q") || "")
+        $("#order-by-filter").val(current_url_params.get("order_by") || "")
+        $("#status-type-filter").val(current_url_params.get("status") || "")
+    })
+    $("#order-by-filter").change(function(){
+        let current_url_params = new URLSearchParams(window.location.search)
+        var selectedOption = $(this).val();
+        current_url_params.set("order_by", selectedOption)
+        let new_url = window.location.pathname + "?" + current_url_params.toString()
+        window.location.href = new_url
+    })
+</script>
+{% endblock extra_js %}
+

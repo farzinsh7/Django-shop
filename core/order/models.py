@@ -70,6 +70,13 @@ class Order(models.Model):
     def calculate_total_price(self):
         return sum(item.price * item.quantity for item in self.order_items.all())
 
+    def get_status(self):
+        return {
+            "id": self.status,
+            "title": OrderStatus(self.status).name,
+            "label": OrderStatus(self.status).label,
+        }
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(

@@ -22,9 +22,9 @@ class AdminOrderListView(LoginRequiredMixin, HasAdminAccessPermission, ListView)
         queryset = Order.objects.prefetch_related(
             'user').all().order_by("-created_at")
         if search_q := self.request.GET.get("q"):
-            queryset = queryset.filter(title__icontains=search_q)
-        if category_id := self.request.GET.get("category_id"):
-            queryset = queryset.filter(category__id=category_id)
+            queryset = queryset.filter(id__icontains=search_q)
+        if status := self.request.GET.get("status"):
+            queryset = queryset.filter(status=status)
         if order_by := self.request.GET.get("order_by"):
             try:
                 queryset = queryset.order_by(order_by)
@@ -35,6 +35,8 @@ class AdminOrderListView(LoginRequiredMixin, HasAdminAccessPermission, ListView)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['total_items'] = self.get_queryset().count()
+        context['statuses'] = OrderStatus.choices
+
         return context
 
 
