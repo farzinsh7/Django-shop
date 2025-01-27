@@ -1,12 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, ListView, DeleteView
-from dashboard.admin.forms import ProductForm
+from dashboard.admin.forms import OrderForm
 from dashboard.permissions import HasAdminAccessPermission
 from django.contrib.messages.views import SuccessMessageMixin
 from order.models import Order
 from django.core import exceptions
 from django.utils.translation import gettext_lazy as _
+from order.utils import calculate_tax, calculate_shipping
+from decimal import Decimal
 
 
 class AdminOrderListView(LoginRequiredMixin, HasAdminAccessPermission, ListView):
@@ -38,11 +40,30 @@ class AdminOrderListView(LoginRequiredMixin, HasAdminAccessPermission, ListView)
 class AdminOrderEditView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, UpdateView):
     queryset = Order.objects.all()
     template_name = "dashboard/admin/orders/order-edit.html"
-    # form_class = ProductForm
+    form_class = OrderForm
     success_message = "بروزرسانی سفارش با موفقیت انجام شد."
 
     def get_success_url(self):
         return reverse_lazy("dashboard:admin:order-edit", kwargs={"pk": self.get_object().pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        order = self.object
+
+        total_price = sum(
+            item.price * item.quantity for item in order.order_items.all())
+
+        # Apply coupon discount if available
+        discount_amount = 0
+        if order.coupon_at_order:
+            discount_amount = round(
+                total_price * Decimal(order.coupon_at_order) / 100)
+            total_price -= discount_amount
+
+        context['discount_amount'] = discount_amount
+
+        return context
 
 
 class AdminOrderDeleteView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, DeleteView):

@@ -1,4 +1,4 @@
-{% extends "dashboard/customer/base.html" %}
+{% extends "dashboard/admin/base.html" %}
 {% load static %}
 {% load humanize %}
 {% block header %}
@@ -19,7 +19,7 @@
  <div class="card">
   <!-- Header -->
   <div class="card-header border-bottom">
-    <h5 class="card-header-title">لیست سفارشات</h5>
+    <h5 class="card-header-title">لیست سفارشات ({{total_items}})</h5>
   </div>
   <!-- End Header -->
 
@@ -72,11 +72,13 @@
             {% for object in object_list %}
             <tr>
               <th scope="row">{{ forloop.counter0|add:page_obj.start_index }}</th>
-              <td><a href="./admin-account-order-single.html">{{object.id}}</a></td>
+              <td><a href="{% url "dashboard:admin:order-edit" pk=object.pk %}">{{object.id}}</a></td>
               <td>{{ object.user.user_profile.get_fullname }}</td>
               <td>{{ object.total_price|intcomma }} تومان</td>
               <td>{{ object.created_at|date:"M d, Y h:i" }}</td>
-              {% if object.status == 2 %}
+              {% if object.status == 1 %}
+              <td><span class="badge bg-info">{{ object.get_status_display }}</span></td>
+              {% elif object.status == 2 %}
               <td><span class="badge bg-warning">{{ object.get_status_display }}</span></td>
               {% elif object.status == 3 %}
               <td><span class="badge bg-primary">{{ object.get_status_display }}</span></td>
