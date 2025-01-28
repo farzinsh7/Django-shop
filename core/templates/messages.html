@@ -5,7 +5,7 @@
         text: `{{ message|safe }}`,
         className: `alert-{{ message.tags }}`,
         style: {
-          background: "blue",
+          background: "{% if 'error' in message.tags %}red{% else %}blue{% endif %}",
         }
     }).showToast();
 </script>

@@ -22,6 +22,15 @@ class SessionAddProductView(View):
                     "messages": ["محصول انتخابی شما فاقد موجودی می باشد."]
                 }, status=400)
 
+        # Check if the cart already has this product and the quantity exceeds stock
+            product_in_cart = next((item for item in cart.get_cart_dict()[
+                                   "items"] if item["product_id"] == str(product.id)), None)
+            if product_in_cart and product_in_cart["quantity"] >= product.stock:
+                return JsonResponse({
+                    "error": True,
+                    "messages": ["موجودی محصول در سبد خرید شما بیشتر از موجودی انبار است."]
+                }, status=400)
+
             cart.add_product(product_id)
 
         if request.user.is_authenticated:

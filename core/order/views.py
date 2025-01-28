@@ -40,6 +40,7 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
         total_price = order.calculate_total_price()
         self.apply_coupon(coupon, order, user, total_price)
         order.save()
+
         return redirect(self.create_payment_url(order))
 
     def create_payment_url(self, order):
@@ -84,12 +85,16 @@ class OrderCheckOutView(LoginRequiredMixin, FormView):
 
     def create_order_items(self, order, cart):
         for item in cart.cart_items.all():
+            product = item.product
+
             OrderItem.objects.create(
                 order=order,
-                product=item.product,
+                product=product,
                 quantity=item.quantity,
-                price=item.product.get_price(),
+                price=product.get_price(),
             )
+
+        return False
 
     def clear_cart(self, cart):
         cart.cart_items.all().delete()
