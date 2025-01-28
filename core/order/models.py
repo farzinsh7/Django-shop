@@ -15,6 +15,9 @@ class UserAddress(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
 
 class OrderStatus(models.IntegerChoices):
     pending = 1, _("در حال انتظار")
@@ -36,6 +39,9 @@ class Coupon(models.Model):
     expiration_date = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.code
@@ -64,6 +70,9 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return f"{self.user.email} - {self.id}"
 
@@ -86,6 +95,9 @@ class OrderItem(models.Model):
     price = models.DecimalField(default=0, max_digits=15, decimal_places=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return f"{self.product.title} - {self.order.id}"

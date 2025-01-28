@@ -19,3 +19,6 @@ class Payment(models.Model):
         choices=PaymentStatus.choices, default=PaymentStatus.pending.value)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']

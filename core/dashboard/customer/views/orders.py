@@ -16,7 +16,7 @@ class CustomerOrdersListView(LoginRequiredMixin, HasCustomerAccessPermission, Li
 
     def get_queryset(self):
         queryset = Order.objects.prefetch_related(
-            'order_items__product').filter(user=self.request.user).order_by('-created_at')
+            'order_items__product').filter(user=self.request.user)
         if search_q := self.request.GET.get("q"):
             queryset = queryset.filter(id__icontains=search_q)
 
