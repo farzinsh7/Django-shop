@@ -19,6 +19,6 @@ class ProductImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'created_at']
 
 
-@admin.register(models.WishlistProducs)
-class WishlistProducsAdmin(admin.ModelAdmin):
+@admin.register(models.WishlistProducts)
+class WishlistProductsAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'product']

@@ -174,9 +174,11 @@
                 </div> {% endcomment %}
     
                 <div class="card-pinned-top-end">
-                    <button type="button" class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="افزودن به علایق">
-                    <i class="bi-heart"></i>
-                    </button>
+                    {% if request.user.is_authenticated %}
+                        <button type="button" class="btn btn-xs btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" onclick="addToWishlist({{ object.id }})" title="افزودن به علایق">
+                        <i data-product-id="{{ object.id }}" class="{% if object.id in wishlist_products %}bi bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+                        </button>
+                    {% endif %}
                 </div>
                 </div>
     

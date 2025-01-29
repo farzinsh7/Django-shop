@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views.generic import (
     ListView,
     DetailView,
+    View,
 )
 from . import models
 
@@ -36,6 +37,8 @@ class ProductGridView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['total_items'] = self.get_queryset().count()
+        context['wishlist_products'] = models.WishlistProducts.objects.filter(
+            user=self.request.user).values_list('product__id', flat=True)
         context['categories'] = models.ProductCategory.objects.all()
         return context
 
@@ -45,3 +48,9 @@ class ProductDetailView(DetailView):
     queryset = models.Product.objects.filter(
         status=models.StatusType.publish.value)
     template_name = "shop/product-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['wishlist_products'] = models.WishlistProducts.objects.filter(
+            user=self.request.user).values_list('product__id', flat=True)
+        return context

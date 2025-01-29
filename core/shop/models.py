@@ -67,7 +67,7 @@ class ProductImage(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
 
 
-class WishlistProducs(models.Model):
+class WishlistProducts(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
