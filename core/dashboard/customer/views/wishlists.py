@@ -3,7 +3,7 @@ from django.views.generic import ListView, DeleteView, View
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from dashboard.permissions import HasCustomerAccessPermission
-from shop.models import WishlistProducts, Product
+from shop.models import WishlistProducts, Product, StatusType
 from django.core import exceptions
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -17,7 +17,8 @@ class CustomerWishlistListView(LoginRequiredMixin, HasCustomerAccessPermission, 
         return self.request.GET.get('page_size', self.paginate_by)
 
     def get_queryset(self):
-        queryset = WishlistProducts.objects.filter(user=self.request.user)
+        queryset = WishlistProducts.objects.filter(
+            user=self.request.user).filter(product__status=StatusType.publish.value)
         if search_q := self.request.GET.get("q"):
             queryset = queryset.filter(product__title__icontains=search_q)
         if order_by := self.request.GET.get("order_by"):
