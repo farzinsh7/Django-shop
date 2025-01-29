@@ -33,7 +33,7 @@ class CustomerWishlistListView(LoginRequiredMixin, HasCustomerAccessPermission, 
 
 
 class CustomerWishlistDeleteView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, DeleteView):
-    template_name = "dashboard/customer/wishlists/wishlist-delete.html"
+    http_method_names = ["post"]
     success_message = "محصول انتخابی با موفقیت حذف گردید."
     success_url = reverse_lazy("dashboard:customer:wishlist-list")
 
