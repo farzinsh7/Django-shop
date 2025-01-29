@@ -1,0 +1,79 @@
+{% extends "dashboard/customer/base.html" %}
+{% load static %}
+{% block header %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-light mb-0">
+    <li class="breadcrumb-item">حساب</li>
+    <li class="breadcrumb-item">داشبورد کاربری</li>
+    <li class="breadcrumb-item active" aria-current="page">
+        لیست علاقه مندی ها  
+    </li>
+  </ol>
+</nav>
+<!-- End Breadcrumb -->
+{% endblock header %}
+{% block content %}
+<!-- Card -->
+<div class="card">
+    <div class="card-header d-sm-flex justify-content-sm-between align-items-sm-center border-bottom">
+      <h5 class="card-header-title">لیست علاقه مندی ها</h5>
+      <span>1 مورد</span>
+    </div>
+    <!-- Body -->
+    <div class="card-body">
+      <!-- List Group -->
+      <ul class="list-group list-group-flush list-group-no-gutters">
+        <!-- Item -->
+        <li class="list-group-item">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <img class="avatar avatar-xl avatar-4x3" src="./assets/img/320x320/img2.jpg"
+                alt="Image Description">
+            </div>
+
+            <div class="flex-grow-1 ms-3">
+              <div class="row">
+                <div class="col-sm-7 mb-3 mb-sm-0">
+                  <h5><a class="text-dark" href="#">کوله پشتی ملی اصل</a></h5>
+
+                  <div class="d-grid gap-1">
+                    <div class="text-body">
+                      <span class="small">جنسیت:</span>
+                      <span class="fw-semibold small">مردان</span>
+                    </div>
+
+                    <div class="text-body">
+                      <span class="small">رنگ:</span>
+                      <span class="fw-semibold small">خاکستری</span>
+                    </div>
+
+                  </div>
+                </div>
+                <!-- End Col -->
+                <div class="col-sm-3">
+                  <div class="col-auto">
+                    <div class="d-grid gap-2">
+                      <a class="link-sm link-danger small" href="javascript:;">
+                        <i class="bi-trash me-1"></i> حذف
+                      </a>
+                    </div>
+                  </div>
+                  <!-- End Col -->
+                </div>
+                <!-- End Row -->
+              </div>
+            </div>
+            <!-- End Row -->
+          </div>
+        </li>
+        <!-- End Item -->
+      </ul>
+      <!-- End List Group -->
+
+    </div>
+    <!-- End Body -->
+    <a class="card-footer card-link text-center border-top" href="{% url "shop:product-grid" %}">به خرید ادامه دهید</a>
+</div>
+<!-- End Card -->
+{% endblock content %}
