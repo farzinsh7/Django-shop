@@ -54,7 +54,7 @@
                   <div class="col-sm-3">
                     <div class="col-auto">
                       <div class="d-grid gap-2">
-                        <a class="link-sm link-danger small" href="javascript:;">
+                        <a class="link-sm link-danger small" href="{% url "dashboard:customer:wishlist-delete" pk=object.pk %}">
                           <i class="bi-trash me-1"></i> حذف
                         </a>
                       </div>
