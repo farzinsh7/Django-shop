@@ -7,7 +7,7 @@ from django.core import exceptions
 
 class CustomerWishlistListView(LoginRequiredMixin, HasCustomerAccessPermission, ListView):
     template_name = "dashboard/customer/wishlists/wishlist-list.html"
-    paginate_by = 10
+    paginate_by = 5
 
     def get_paginate_by(self, queryset):
         return self.request.GET.get('page_size', self.paginate_by)
@@ -26,5 +26,5 @@ class CustomerWishlistListView(LoginRequiredMixin, HasCustomerAccessPermission, 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['total_orders'] = self.get_queryset().count()
+        context['total_items'] = self.get_queryset().count()
         return context

@@ -18,60 +18,99 @@
 <div class="card">
     <div class="card-header d-sm-flex justify-content-sm-between align-items-sm-center border-bottom">
       <h5 class="card-header-title">لیست علاقه مندی ها</h5>
-      <span>1 مورد</span>
+      <span>{{ total_items }} مورد</span>
     </div>
     <!-- Body -->
     <div class="card-body">
       <!-- List Group -->
       <ul class="list-group list-group-flush list-group-no-gutters">
+        {% for object in object_list %}
         <!-- Item -->
         <li class="list-group-item">
-          <div class="d-flex">
-            <div class="flex-shrink-0">
-              <img class="avatar avatar-xl avatar-4x3" src="./assets/img/320x320/img2.jpg"
-                alt="Image Description">
-            </div>
-
-            <div class="flex-grow-1 ms-3">
-              <div class="row">
-                <div class="col-sm-7 mb-3 mb-sm-0">
-                  <h5><a class="text-dark" href="#">کوله پشتی ملی اصل</a></h5>
-
-                  <div class="d-grid gap-1">
-                    <div class="text-body">
-                      <span class="small">جنسیت:</span>
-                      <span class="fw-semibold small">مردان</span>
-                    </div>
-
-                    <div class="text-body">
-                      <span class="small">رنگ:</span>
-                      <span class="fw-semibold small">خاکستری</span>
-                    </div>
-
-                  </div>
-                </div>
-                <!-- End Col -->
-                <div class="col-sm-3">
-                  <div class="col-auto">
-                    <div class="d-grid gap-2">
-                      <a class="link-sm link-danger small" href="javascript:;">
-                        <i class="bi-trash me-1"></i> حذف
-                      </a>
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <img class="avatar avatar-xl avatar-4x3" src="{{ object.product.image.url }}"
+                  alt="{{ object.product.title }}">
+              </div>
+  
+              <div class="flex-grow-1 ms-3 align-content-center">
+                <div class="row">
+                  <div class="col-sm-7 mb-3 mb-sm-0">
+                    <h5><a class="text-dark" href="{% url "shop:product-detail" slug=object.product.slug %}">{{ object.product.title }}</a></h5>
+  
+                    <div class="d-grid gap-1">
+  
+                      <div class="text-body">
+                        <span class="small">دسته بندی:</span>
+                        {% for category in object.product.category.all %}
+                        <a href="#" class="link-sm link-secondary">{{ category.title}}</a>
+                        {% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                      </div>
+  
                     </div>
                   </div>
                   <!-- End Col -->
+                  <div class="col-sm-3">
+                    <div class="col-auto">
+                      <div class="d-grid gap-2">
+                        <a class="link-sm link-danger small" href="javascript:;">
+                          <i class="bi-trash me-1"></i> حذف
+                        </a>
+                      </div>
+                    </div>
+                    <!-- End Col -->
+                  </div>
+                  <!-- End Row -->
                 </div>
-                <!-- End Row -->
               </div>
+              <!-- End Row -->
             </div>
-            <!-- End Row -->
+          </li>
+          <!-- End Item -->
+          {% empty %}
+          <div class="row text-center w-100 py-5">
+              <p class="text-center">هیچ کالایی در لیست علایق شما وجود ندارد</p>
           </div>
-        </li>
-        <!-- End Item -->
+          <!-- End Col -->
+        {% endfor %}
       </ul>
       <!-- End List Group -->
-
     </div>
+    {% if page_obj.has_other_pages %}
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <button class="page-link" onclick="changePage({{ page_obj.previous_page_number }})" aria-label="Previous">
+            <span aria-hidden="true">
+                <i class="bi-chevron-double-right small"></i>
+            </span>
+            </button>
+        </li>
+        {% endif %}
+        {% for page in page_obj.paginator %}
+        {% if page.number == page_obj.number %}
+        <li class="page-item active"><button class="page-link" onclick="changePage({{ page.number }})">{{ page.number }}</button></li>
+        {% elif page.number > page_obj.number|add:'-3' and page.number < page_obj.number|add:'3' %}
+        <li class="page-item"><button class="page-link" onclick="changePage({{ page.number }})">{{ page.number }}</button></li>
+        {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <button class="page-link " onclick="changePage({{ page_obj.next_page_number }})" aria-label="Next">
+                <span aria-hidden="true">
+                    <i class="bi-chevron-double-left small"></i>
+                </span>
+                </button>
+            </li>
+        {% endif %}
+        </ul>
+    </nav>
+    <!-- End Pagination -->
+    {% endif %}
     <!-- End Body -->
     <a class="card-footer card-link text-center border-top" href="{% url "shop:product-grid" %}">به خرید ادامه دهید</a>
 </div>

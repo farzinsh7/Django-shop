@@ -17,3 +17,8 @@ class ProductCategoryAdmin(admin.ModelAdmin):
 @admin.register(models.ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'created_at']
+
+
+@admin.register(models.WishlistProducs)
+class WishlistProducsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'product']
