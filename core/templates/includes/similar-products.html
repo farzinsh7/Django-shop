@@ -17,7 +17,7 @@
                 <div class="card-pinned-top-end">
                     {% if request.user.is_authenticated %}
                         <button type="button" class="btn btn-xs btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" onclick="addToWishlist({{ similar_product.id }})" title="افزودن به علایق">
-                        <i data-product-id="{{ similar_product.id }}" class="{% if similar_product.id in wishlist_products %}bi bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+                        <i data-product-id="{{ similar_product.id }}" class="{% if similar_product.id in wishlist_products %}bi bi-heart-fill text-danger{% else %}bi-heart-fill{% endif %}"></i>
                         </button>
                     {% endif %}
                 </div>

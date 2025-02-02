@@ -5,6 +5,8 @@ from django.views.generic import (
     DetailView,
     View,
 )
+from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from . import models
 
 
@@ -62,3 +64,25 @@ class ProductDetailView(DetailView):
         else:
             context['wishlist_products'] = []
         return context
+
+
+class AddOrRemoveWishlistView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'درخواست نامعتبر'}, status=400)
+
+        product_id = request.POST.get('product_id')
+        message = ""
+
+        if product_id:
+            try:
+                whislist_item = models.WishlistProducts.objects.get(
+                    user=request.user, product__id=product_id)
+                whislist_item.delete()
+                message = "محصول از لیست علاقه مندی حذف گردید."
+            except models.WishlistProducts.DoesNotExist:
+                models.WishlistProducts.objects.create(
+                    user=request.user, product_id=product_id)
+                message = "محصول مورد نظر با موفقیت به لیست علاقه مندی اضافه گردید."
+
+        return JsonResponse({"message": message})

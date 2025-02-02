@@ -166,37 +166,24 @@
 <script>
   function addToWishlist(product_id) {
       $.ajax({
-          url: '{% url "dashboard:customer:add_to_wishlist" %}', // URL for the AddToWishlistView
+          url: '{% url "shop:add-or-remove-wishlist" %}', // URL for the AddToWishlistView
           method: 'POST',
           data: {
               product_id: product_id,
               csrfmiddlewaretoken: '{{ csrf_token }}'
           },
           success: function (response) {
-              if (response.success) {
-                  // Display success message
-                  Toastify({
-                      text: response.message,
-                      className: "success",
-                      style: {
-                          background: "blue"
-                      }
-                  }).showToast();
+            Toastify({
+              text: response.message,
+              className: "success",
+              style: {
+                  background: "blue"
+                }
+              }).showToast();
 
-                  // Optionally, update the UI (e.g., disable the button or change its text)
-                  $(`i[data-product-id="${product_id}"]`).removeClass('bi-heart').addClass('bi-heart-fill text-danger');
-              } 
-              else {
-                  // Display warning message if the product is already in the wishlist
-                  Toastify({
-                      text: response.message,
-                      className: "warning",
-                      style: {
-                          background: "orange"
-                      }
-                  }).showToast();
-              }
-          },
+              // Optionally, update the UI (e.g., disable the button or change its text)
+              $(`i[data-product-id="${product_id}"]`).toggleClass('text-danger');
+              },
           error: function (jqXHR) {
               let response = jqXHR.responseJSON;
               if (response && response.message) {
