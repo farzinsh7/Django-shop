@@ -162,42 +162,29 @@
           }
       });
   }
-</script>
-<script>
-  function addToWishlist(product_id) {
-      $.ajax({
-          url: '{% url "shop:add-or-remove-wishlist" %}', // URL for the AddToWishlistView
-          method: 'POST',
-          data: {
-              product_id: product_id,
-              csrfmiddlewaretoken: '{{ csrf_token }}'
-          },
-          success: function (response) {
-            Toastify({
-              text: response.message,
-              className: "success",
-              style: {
-                  background: "blue"
-                }
-              }).showToast();
-
-              // Optionally, update the UI (e.g., disable the button or change its text)
-              $(`i[data-product-id="${product_id}"]`).toggleClass('text-danger');
-              },
-          error: function (jqXHR) {
-              let response = jqXHR.responseJSON;
-              if (response && response.message) {
-                  // Display error message
-                  Toastify({
-                      text: response.message || 'خطایی رخ داده است لطفا مجدد تلاش کنید.',
-                      className: "error",
-                      style: {
-                          background: "red"
-                      }
-                  }).showToast();
+function addToWishlist(product_id) {
+    $.ajax({
+        url: '{% url "shop:add-or-remove-wishlist" %}', // URL for the AddToWishlistView
+        method: 'POST',
+        data: {
+            product_id: product_id,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (response) {
+          Toastify({
+            text: response.message,
+            className: "success",
+            style: {
+                background: "blue"
               }
-          }
-      });
-  }
+            }).showToast();
+
+            $(`i[data-product-id="${product_id}"]`).toggleClass('text-danger');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        }
+    });
+}
 </script>
 
