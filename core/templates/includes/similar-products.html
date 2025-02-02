@@ -14,15 +14,12 @@
             <div class="card card-bordered shadow-none text-center h-100">
                 <div class="card-pinned">
                 <img class="card-img-top" src="{{ similar_product.image.url }}" alt="Image Description">
-    
-                {% comment %} <div class="card-pinned-top-start">
-                    <span class="badge bg-success rounded-pill">جدید</span>
-                </div> {% endcomment %}
-    
                 <div class="card-pinned-top-end">
-                    <button type="button" class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="افزودن به علایق">
-                    <i class="bi-heart"></i>
-                    </button>
+                    {% if request.user.is_authenticated %}
+                        <button type="button" class="btn btn-xs btn-icon rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" onclick="addToWishlist({{ similar_product.id }})" title="افزودن به علایق">
+                        <i data-product-id="{{ similar_product.id }}" class="{% if similar_product.id in wishlist_products %}bi bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+                        </button>
+                    {% endif %}
                 </div>
                 </div>
     

@@ -37,8 +37,12 @@ class ProductGridView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['total_items'] = self.get_queryset().count()
-        context['wishlist_products'] = models.WishlistProducts.objects.filter(
-            user=self.request.user).values_list('product__id', flat=True)
+        if self.request.user.is_authenticated:
+            context['wishlist_products'] = models.WishlistProducts.objects.filter(
+                user=self.request.user
+            ).values_list('product__id', flat=True)
+        else:
+            context['wishlist_products'] = []
         context['categories'] = models.ProductCategory.objects.all()
         return context
 
@@ -51,6 +55,10 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['wishlist_products'] = models.WishlistProducts.objects.filter(
-            user=self.request.user).values_list('product__id', flat=True)
+        if self.request.user.is_authenticated:
+            context['wishlist_products'] = models.WishlistProducts.objects.filter(
+                user=self.request.user
+            ).values_list('product__id', flat=True)
+        else:
+            context['wishlist_products'] = []
         return context
