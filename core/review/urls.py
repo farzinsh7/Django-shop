@@ -4,5 +4,5 @@ from . import views
 app_name = "review"
 
 urlpatterns = [
-    # path("home/", views.DashboardHomeView.as_view(), name="home"),
+    path("submit-review/", views.SubmitReviewView.as_view(), name="submit-review"),
 ]
