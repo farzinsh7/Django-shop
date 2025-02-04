@@ -6,6 +6,4 @@ urlpatterns = [
     path("review/list/", views.AdminReviewListView.as_view(), name="review-list"),
     path("review/<int:pk>/edit/",
          views.AdminReviewEditView.as_view(), name="review-edit"),
-    path("review/<int:pk>/delete/",
-         views.AdminReviewDeleteView.as_view(), name="review-delete"),
 ]

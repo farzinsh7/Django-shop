@@ -11,9 +11,14 @@ from review.models import Review, ReviewStatusType
 
 class AdminReviewListView(LoginRequiredMixin, HasAdminAccessPermission, ListView):
     template_name = "dashboard/admin/reviews/review-list.html"
+    paginate_by = 10
+
+    def get_paginate_by(self, queryset):
+        return self.request.GET.get('page_size', self.paginate_by)
 
     def get_queryset(self):
-        queryset = Review.objects.all()
+        queryset = Review.objects.select_related(
+            'user', 'product').all()
         if search_q := self.request.GET.get("q"):
             queryset = queryset.filter(product__title__icontains=search_q)
         if status := self.request.GET.get("status"):
@@ -27,7 +32,9 @@ class AdminReviewListView(LoginRequiredMixin, HasAdminAccessPermission, ListView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        queryset = self.object_list
         context['statuses'] = ReviewStatusType.choices
+        context['total_review'] = queryset.count()
         return context
 
 
@@ -39,12 +46,3 @@ class AdminReviewEditView(LoginRequiredMixin, HasAdminAccessPermission, SuccessM
 
     def get_success_url(self):
         return reverse_lazy("dashboard:admin:review-edit", kwargs={"pk": self.get_object().pk})
-
-
-class AdminReviewDeleteView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, DeleteView):
-    http_method_names = ["post"]
-    success_message = "دیدگاه شما با موفقیت حذف گردید."
-    success_url = reverse_lazy("dashboard:admin:review-list")
-
-    def get_queryset(self):
-        return Review.objects.all()
