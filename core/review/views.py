@@ -15,6 +15,8 @@ class SubmitReviewView(LoginRequiredMixin, CreateView):
     form_class = SubmitReviewForm
 
     def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
         product = form.cleaned_data['product']
         messages.success(
             self.request, "دیدگا شما با موفقیت ثبت شد و پس از بررسی نمایش داده می شود.")
