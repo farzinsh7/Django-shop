@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . import models
 from review.models import Review, ReviewStatusType
+from django.db.models import Count
 
 
 class ProductGridView(ListView):
@@ -59,14 +60,34 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.get_object()
+
         if self.request.user.is_authenticated:
             context['wishlist_products'] = models.WishlistProducts.objects.filter(
                 user=self.request.user
             ).values_list('product__id', flat=True)
         else:
             context['wishlist_products'] = []
+
         context['reviews'] = Review.objects.filter(
-            product=product, status=ReviewStatusType.accepted.value)
+            product=product, status=ReviewStatusType.accepted.value
+        )
+
+        ratings = Review.objects.filter(
+            product=product, status=ReviewStatusType.accepted.value
+        ).values('rate').annotate(count=Count('id'))
+
+        rating_counts = {rate: 0 for rate in range(5, 0, -1)}
+
+        total_ratings = sum(rating['count'] for rating in ratings)
+
+        for rating in ratings:
+            rating_counts[rating['rate']] = {
+                'count': rating['count'],
+                'percent': (rating['count'] / total_ratings) * 100 if total_ratings > 0 else 0
+            }
+
+        context['rating_counts'] = rating_counts
+
         return context
 
 
