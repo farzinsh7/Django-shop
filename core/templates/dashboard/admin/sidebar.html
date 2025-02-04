@@ -54,6 +54,12 @@
             </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'review-list' %}active{% endif %}" href="{% url "dashboard:admin:review-list" %}">
+                    <i class="bi-chat-dots nav-icon"></i>دیدگاه کاربران <span
+                    class="badge bg-soft-dark text-dark rounded-pill nav-link-badge me-2">{{review_count}}</span>
+                </a>
+                </li>
+            <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'orders-list' %}active{% endif %}" href="{% url "dashboard:admin:orders-list" %}">
                 <i class="bi-receipt-cutoff nav-icon"></i> سفارشات<span
                 class="badge bg-soft-dark text-dark rounded-pill nav-link-badge me-2">{{order_count}}</span></a>

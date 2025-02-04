@@ -1,0 +1,123 @@
+{% extends "dashboard/admin/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-light mb-0">
+    <li class="breadcrumb-item">حساب</li>
+    <li class="breadcrumb-item">داشبورد ادمین</li>
+    <li class="breadcrumb-item active" aria-current="page">
+         دیدگاه کاربران  
+    </li>
+  </ol>
+</nav>
+<!-- End Breadcrumb -->
+{% endblock header %}
+{% block content %}
+<!-- Card -->
+<div class="card">
+    <!-- Header -->
+    <div class="card-header border-bottom">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="">لیست نظرات</h5>
+      </div>
+    </div>
+    <!-- End Header -->
+
+    <!-- Body -->
+    <div class="card-body">
+      <div class="container pb-5">
+        <form class="row">
+
+          <!-- Input Card -->
+          <div class="col-md-5 py-1">
+            <input type="text" name="q" class="form-control" id="search-query-filter" placeholder="جستجوی" aria-label="جستجوی دیدگاه">
+          </div>
+          <!-- End Input Card -->
+          <div class="col-md-3 py-1">
+            <select class="form-select" id="order-by-filter">
+                <option value="" selected>مرتب سازی</option>
+                <option value="-created_at">جدیدترین</option>
+                <option value="created_at">قدیمی ترین</option>
+                <option value="-price">بیشترین قیمت</option>
+                <option value="price">کمترین قیمت</option>
+            </select>
+          </div>
+          <div class="col-md-1 py-1">
+            <button type="submit" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="row">
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">وضعیت</th>
+                <th scope="col">محصول</th>
+                <th scope="col">توسط</th>
+                <th scope="col">تاریخ ثبت</th>
+                <th scope="col">عملیات</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for object in object_list  %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    {% if object.status == 1 %}
+                    <td><span class="badge bg-warning">{{ object.get_status_display }}</span></td>
+                    {% elif object.status == 2 %}
+                    <td><span class="badge bg-success">{{ object.get_status_display }}</span></td>
+                    {% elif object.status == 3 %}
+                    <td><span class="badge bg-danger">{{ object.get_status_display }}</span></td>
+                    {% endif %}
+                    <td>{{ object.product.title }}</td>
+                    <td>{{ object.user.user_profile.get_fullname }}</td>
+                    <td>{{ object.created_at|date:"M d, Y h:i" }}</td>
+                    <td class="align-content-center">
+                      <a class="btn btn-sm btn-icon btn-ghost-secondary" href="{% url "dashboard:admin:review-edit" pk=object.pk %}"><i class="bi-pencil-square"></i></a>
+                      <form action="{% url "dashboard:admin:review-delete" pk=object.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-icon btn-ghost-danger" href="{% url "dashboard:admin:review-delete" pk=object.pk %}"><i class="bi-trash"></i></button>
+                      </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <div class="row text-center w-100 py-5">
+                    <p class="text-center">دیدگاهی ثبت نشده است.</p>
+                </div>
+                <!-- End Col -->
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- End Table -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Body -->
+</div>
+<!-- End Card -->
+{% endblock content %}
+{% block extra_js %}
+<script>
+    $(document).ready(function(){
+        let current_url_params = new URLSearchParams(window.location.search)
+        $("#search-query-filter").val(current_url_params.get("q") || "")
+        $("#order-by-filter").val(current_url_params.get("order_by") || "")
+        $("#status-type-filter").val(current_url_params.get("status") || "")
+    })
+    $("#order-by-filter").change(function(){
+        let current_url_params = new URLSearchParams(window.location.search)
+        var selectedOption = $(this).val();
+        current_url_params.set("order_by", selectedOption)
+        let new_url = window.location.pathname + "?" + current_url_params.toString()
+        window.location.href = new_url
+    })
+</script>
+{% endblock extra_js %}

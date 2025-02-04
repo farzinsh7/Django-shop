@@ -83,6 +83,7 @@ TEMPLATES = [
                 # Custom Context Processors
                 'cart.context_processors.cart_processor',
                 'dashboard.context_processors.order_count_processor',
+                'dashboard.context_processors.review_count_processor',
             ],
         },
     },
