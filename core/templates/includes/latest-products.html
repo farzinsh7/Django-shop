@@ -46,13 +46,15 @@
                     <!-- Rating -->
                 <a class="d-inline-flex align-items-center mb-3" href="#">
                     <div class="d-flex gap-1 ms-2">
-                    <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                    <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                    <img src="{% static 'svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                    <img src="{% static 'svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                    <img src="{% static 'svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
+                        {% for i in "12345" %}
+                        {% if i|add:0 <= latest_product.avg_rate %}
+                        <span><i class="bi bi-star-fill star-rate"></i></span>
+                        {% else %}
+                        <span><i class="bi bi-star star-rate"></i></span>
+                        {% endif %}
+                        {% endfor %}
                     </div>
-                    <span class="small">7</span>
+                    <span class="small">{{ latest_product.avg_rate }}</span>
                 </a>
                 <!-- End Rating -->
                 <button type="button" 

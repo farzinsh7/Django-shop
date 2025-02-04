@@ -53,11 +53,13 @@
                 <div class="col-6">
                     <!-- Rating -->
                     <a class="d-flex gap-1 mb-4" href="#reviewSection">
+                        {% for i in "12345" %}
+                        {% if i|add:0 <= object.avg_rate %}
+                        <span><i class="bi bi-star-fill star-rate"></i></span>
+                        {% else %}
                         <span><i class="bi bi-star star-rate"></i></span>
-                        <span><i class="bi bi-star star-rate"></i></span>
-                        <span><i class="bi bi-star star-rate"></i></span>
-                        <span><i class="bi bi-star star-rate"></i></span>
-                        <span><i class="bi bi-star star-rate"></i></span>
+                        {% endif %}
+                        {% endfor %}
                         <span class="ms-1">5 / {{object.avg_rate}}</span>
                     </a>
                     <!-- End Rating -->
@@ -252,11 +254,13 @@
                     <div class="flex-grow-1 me-3">
                     <!-- Rating -->
                     <div class="d-flex gap-1 small">
+                        {% for i in "12345" %}
+                        {% if i|add:0 <= object.avg_rate %}
+                        <span><i class="bi bi-star-fill star-rate"></i></span>
+                        {% else %}
                         <span><i class="bi bi-star star-rate"></i></span>
-                        <span><i class="bi bi-star star-rate"></i></span>
-                        <span><i class="bi bi-star star-rate"></i></span>
-                        <span><i class="bi bi-star star-rate"></i></span>
-                        <span><i class="bi bi-star star-rate"></i></span>
+                        {% endif %}
+                        {% endfor %}
                     </div>
                     <!-- End Rating -->
                     <span class="text-white">{{ reviews.count }} نظر</span>
