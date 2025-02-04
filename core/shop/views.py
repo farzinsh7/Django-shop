@@ -8,6 +8,7 @@ from django.views.generic import (
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . import models
+from review.models import Review, ReviewStatusType
 
 
 class ProductGridView(ListView):
@@ -57,12 +58,15 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        product = self.get_object()
         if self.request.user.is_authenticated:
             context['wishlist_products'] = models.WishlistProducts.objects.filter(
                 user=self.request.user
             ).values_list('product__id', flat=True)
         else:
             context['wishlist_products'] = []
+        context['reviews'] = Review.objects.filter(
+            product=product, status=ReviewStatusType.accepted.value)
         return context
 
 
