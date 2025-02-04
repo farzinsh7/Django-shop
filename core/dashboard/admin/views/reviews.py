@@ -5,9 +5,8 @@ from dashboard.admin.forms import AdminReviewForm
 from dashboard.permissions import HasAdminAccessPermission
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core import exceptions
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from review.models import Review
+from review.models import Review, ReviewStatusType
 
 
 class AdminReviewListView(LoginRequiredMixin, HasAdminAccessPermission, ListView):
@@ -16,7 +15,9 @@ class AdminReviewListView(LoginRequiredMixin, HasAdminAccessPermission, ListView
     def get_queryset(self):
         queryset = Review.objects.all()
         if search_q := self.request.GET.get("q"):
-            queryset = queryset.filter(title__icontains=search_q)
+            queryset = queryset.filter(product__title__icontains=search_q)
+        if status := self.request.GET.get("status"):
+            queryset = queryset.filter(status=status)
         if order_by := self.request.GET.get("order_by"):
             try:
                 queryset = queryset.order_by(order_by)
@@ -26,7 +27,7 @@ class AdminReviewListView(LoginRequiredMixin, HasAdminAccessPermission, ListView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['now'] = timezone.now()
+        context['statuses'] = ReviewStatusType.choices
         return context
 
 

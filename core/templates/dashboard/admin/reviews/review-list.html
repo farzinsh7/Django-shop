@@ -30,24 +30,31 @@
       <div class="container pb-5">
         <form class="row">
 
-          <!-- Input Card -->
-          <div class="col-md-5 py-1">
-            <input type="text" name="q" class="form-control" id="search-query-filter" placeholder="جستجوی" aria-label="جستجوی دیدگاه">
-          </div>
-          <!-- End Input Card -->
-          <div class="col-md-3 py-1">
-            <select class="form-select" id="order-by-filter">
+            <!-- Input Card -->
+            <div class="col-md-5 py-1">
+              <input type="text" name="q" class="form-control" id="search-query-filter" placeholder="جستجو" aria-label="جستجو">
+    
+            </div>
+            <!-- End Input Card -->
+            <div class="col-md-3 py-1">
+              <select class="form-select" id="status-type-filter" name="status">
+                <option value="" selected>وضعیت</option>
+                {% for status_type in statuses %}
+                <option value="{{status_type.0}}">{{status_type.1}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-3 py-1">
+              <select class="form-select" id="order-by-filter">
                 <option value="" selected>مرتب سازی</option>
                 <option value="-created_at">جدیدترین</option>
                 <option value="created_at">قدیمی ترین</option>
-                <option value="-price">بیشترین قیمت</option>
-                <option value="price">کمترین قیمت</option>
             </select>
-          </div>
-          <div class="col-md-1 py-1">
-            <button type="submit" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
-          </div>
-        </form>
+            </div>
+            <div class="col-md-1 py-1">
+              <button type="submit" class="btn btn-primary btn-search"><i class="bi-search"></i></button>
+            </div>
+          </form>
 
       </div>
 
